@@ -21,12 +21,38 @@ def searchProjects(request):
     user:User = request.user
     required_profile = ProfilesTable.objects.get(user=user)
     
+    # context = {**context, **dict(request.GET)}
+    
+    query_title = request.GET.get('query_title')
+    query_min_budget = request.GET.get('query_min_budget')
+    query_max_budget = request.GET.get('query_max_budget')
+    query_skills = request.GET.getlist('query_skills')
+    
+    
+    
+    min_budget = int(query_min_budget) if query_min_budget else 0
+    max_budget = int(query_max_budget) if query_max_budget else 999999999999999999
+    query_title = query_title if query_title else ''
+    
+    
+    context['query_title'] = query_title
+    context['query_min_budget'] = query_min_budget
+    context['query_max_budget'] = query_max_budget
+    context['query_skills'] = query_skills
+    
+    print(query_skills)
      
     available_projects = ProjectsTable.objects.filter(
-        created_by=required_profile,status=PROJECT_STATUS_OPEN
+        title__contains=query_title, created_by=required_profile,status=PROJECT_STATUS_OPEN, budget__gte=min_budget, budget__lte=max_budget, 
     ) 
+    
+    if query_skills: 
+        available_projects = available_projects.filter(skills__name__in=query_skills)
+        
         
        
+       
+    required_freelancer = ProfilesTable.objects.get(user=request.user)
     json_available_projects = []
     for i,project in enumerate(list(available_projects)):
         json_available_projects.append({
@@ -38,11 +64,17 @@ def searchProjects(request):
             "description": project.description,
             # "freelancer_profile_username": project.freelancer.username if project else "",
             # "freelancer_profile_id": project.freelancer.id,
+            "skills": project.skills,
             "total_bids": int(project.bids.all().count()),
+            "bid_submitted": project.bids.filter(created_by=required_freelancer).exists(),
         }) 
+        
+    available_projects = json_available_projects
     context['available_projects'] = available_projects
-    context['json_available_projects'] = json.dumps(json_available_projects)
+    # context['json_available_projects'] = json.dumps(json_available_projects)
     context['available_project_statuses'] = AVAILABLE_PROJECT_STATUSES
+    available_skills = SkillsTable.objects.all()
+    context['available_skills'] = available_skills  
     
     return render(request, 'dashboard/searchProjects.html',context) 
  

@@ -4,6 +4,7 @@
 <section id="basic-datatable">
 
 
+ 
 
 
 	<div class="row">
@@ -11,35 +12,29 @@
 			<div class="card" style="padding:0px 2%">
 				<div class="card-header border-bottom p-1">
 					<div class="head-label">
-						<h6 class="mb-0">Files Listing</h6>
+						<h6 class="mb-0">Project Listing</h6>
 					</div>
 
 
 					
 					<div class="dt-action-buttons text-end"> 
 						<div class="dt-buttons d-inline-flex">
-							<a type="button" class="btn btn-info" id="clear_filter_btn">
+							<a href="{%url 'searchProjects'%}" type="button" class="btn btn-info" id="clear_filter_btn">
 								Clear Filter
 							</a>
 						</div> 
 
 
 
-                        <!-- <button id="delete_files_btn" type="button" class="btn btn-danger waves-effect">
-                            <i class="me-50" data-feather="trash"></i>
-                            <span>Delete Files</span>
-                        </button> -->
+                        <button id="" type="button" class="btn btn-secondary waves-effect" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                            <i class="me-50" data-feather="filter"></i>
+                            <span>Filter</span>
+                        </button>
+ 
 
-
-                        <!-- 
-                        <button type="button" class="btn btn-success waves-effect" id="show_all_users_modal_btn" data-bs-toggle="modal" data-bs-target="#show_all_users_modal">
-                            <i class="me-50" data-feather="share-2"></i>
-                            Share
-                        </button> -->
-
-                        <a href="{%url 'addNewProject'%}" type="button" class="btn btn-primary waves-effect">
+                        <a id="apply_filter_btn" type="button" class="btn btn-primary waves-effect">
                             <i class="me-50" data-feather="plus"></i>
-                            <span>Post New Porject</span>
+                            <span>Apply Filter</span>
                         </a>
                 
 
@@ -50,15 +45,88 @@
 
 
 				<div class="row" id="basic-table">
+
+
+
+					<form action="/dashboard/searchProjects" method="get" id="filter_form">
+						<div class="row m-0 collapse"  id="collapseExample" >
+							<div class="col-md-6 col-12">
+							  <div class="mb-1">
+								<label class="form-label" for="file_name">Title</label>
+								<input type="text" id="file_name" class="form-control filter_input_query" placeholder="File Name" name="query_title" value="{{query_title}}">
+							  </div>
+							</div>
+							
+							
+							<div class="col-md-3 col-12">
+							  <div class="mb-1">
+								<label class="form-label" for="file_name">Min Budget</label>
+								<input type="number" id="file_name" class="form-control filter_input_query" placeholder="Min Budget" name="query_min_budget" value="{{query_min_budget}}">
+							  </div>
+							</div>
+	
+							<div class="col-md-3 col-12">
+							  <div class="mb-1">
+								<label class="form-label" for="file_name">Max Budget</label>
+								<input type="number" id="file_name" class="form-control filter_input_query" placeholder="Max Budget" name="query_max_budget" value="{{query_max_budget}}">
+							  </div>
+							</div>
+							 
+							  
+	 
+							<div class="col-md-12 col-12 mb-1" data-select2-id="46">
+								<label class="form-label" for="data_receiver">Skills</label>
+								<div class="position-relative" data-select2-id="45">
+									<select name="query_skills" class="select2 form-select select2-hidden-accessible" id="data_receiver" multiple="" data-select2-id="data_receiver" tabindex="-1" aria-hidden="true">
+									<optgroup label="All" data-select2-id="52">
+										{% for skill in available_skills %}
+										{% if skill.name in query_skills  %}
+										<option value="{{skill.name}}" data-select2-id="53-{{skill.name}}" selected>{{skill.name}}</option>
+										{% else %} 
+										<option value="{{skill.name}}" data-select2-id="53-{{skill.name}}">{{skill.name}}</option>
+										{% endif %} 
+
+										{% endfor %} 
+									</optgroup>
+								   
+									
+								</select>
+								</div>
+							</div> 
+	
+	
+		  
+							
+	
+		  
+		   
+		  
+						  </div>
+					</form>
+
 					<div class="col-12">
 
 						{% for project in available_projects %}
 							<div class="card">
+
+
+
+								
+
+
 								<div class="card-body" style="background-color: rgb(246, 251, 255);">
 									<div class="d-flex justify-content-between">
 										<h3>{{project.title}}</h3>
 										<span>
+											
+											{% if project.bid_submitted %}
+												
+											{% else %}
+												
 											<a class="btn btn-primary"  href="{%url 'viewProject'%}?id={{project.id}}">Submit Proposal</a>
+											{% endif %}
+
+
 											<a class="btn btn-primary"  href="{%url 'viewProjectBids'%}?id={{project.id}}">View Bids</a>
 										</span>
 									</div>
@@ -86,9 +154,10 @@
 
  
 <script>
+
+
 	populateTableCheckBoxes('projects_table_checkbox_parent', 'projects_table_checkbox_child')
-	var available_projects = JSON.parse(`{{json_available_projects |safe}}`);
-	var target_rows = $(".project_tr")
+	 
 
 
     $(".delete_project_btn").click(function (e) {
@@ -97,59 +166,22 @@
             return ;
         }
     })
+
+    $("#apply_filter_btn").click(function (e) {
+         $("#filter_form").submit()
+    })
+
+    $(".withdraw_btn").click(function (e) {
+        if(!confirm('Are you sure to withdraw bid ?')){
+			e.preventDefault();
+		}
+	})
+
+
   
-	$('.filter_input_query').on('keyup change', function (e) {
-		var file_name = $('#file_name').val().replace("  ", '').toLowerCase()
-		var uuid = $('#uuid').val().replace("  ", '').toLowerCase()
-		var upload_date = $('#upload_date').val().replace("  ", '').toLowerCase() 
-
-		for (var i = 0; i < target_rows.length; i++) {
-			var current_record_id = $(target_rows[i]).prop('id')
-			var current_record = available_projects[i] 
-      
-			if (
-				current_record.orignal_file_name.toLowerCase().includes(file_name) &&
-				current_record.file_name.toLowerCase().includes(uuid) && 
-				current_record.timestamp.toLowerCase().includes(upload_date)   
-			) {
-				$(target_rows[i]).show()
-			} else {
-				$(target_rows[i]).hide()
-			}
-		}
-	})
-
-	$("#clear_filter_btn").click(function (e) {
-		$('#file_name').val('')
-		$('#uuid').val('')
-		$('#upload_date').val('') 
-		for (var i = 0; i < target_rows.length; i++) {
-			$(target_rows[i]).show()
-		}
-	})
+ 
 
 
 
-
-	$("#delete_files_btn").click(function () {
-		var ids = getSelectedChildIds('projects_table_checkbox_child')
-		console.log(ids)
-		if (ids.length < 1) {
-			alert("Please select atleast one File")
-			return
-		}
-		var decision = confirm("Are you sure to delete selected Files ?")
-		if (!decision) {
-			e.preventDefault()
-			return
-		} 
-		$.ajax({
-			url: `{%url 'manageProjects'%}?ids=${ids}`,
-			dataType: 'json',
-			success: function (res) {
-				window.location.reload()
-			}
-		})
-	})
-</script>
+ </script>
 {% endblock 'mainlayout' %}

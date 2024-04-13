@@ -15,6 +15,20 @@
 
 				
                 <div>
+
+                    {% if bid_submitted %}
+                    <div class="d-flex justify-content-between">
+                        <dir></dir>
+                        <a class="btn btn-danger"  href="{%url 'withdrawBid'%}?project_id={{required_project.id}}"  >Withdraw Bid</a>
+                    </div>
+
+                    <br>
+                    <br>
+                        
+                    {% else %}
+                        
+                    {% endif %}
+
                     {% for bid in required_project.bids.all %}
                         
                     <div class="card">

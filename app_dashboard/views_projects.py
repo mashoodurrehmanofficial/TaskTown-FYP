@@ -136,6 +136,24 @@ def viewProjectDetails(request):
         
 
 @csrf_exempt
+def withdrawBid(request):
+    context = {"title":"Project Bids"}
+    project_id = request.GET.get("project_id")
+    required_project = ProjectsTable.objects.get(id=int(project_id))
+    required_freelancer = ProfilesTable.objects.get(user=request.user)
+    required_bid = required_project.bids.filter(created_by=required_freelancer)
+    
+    
+    required_bid.delete()
+    print("project_id = ",project_id)
+    
+    # context['required_project'] = required_project
+    
+    return redirect(f'/dashboard/viewProjectBids?id={project_id}') 
+
+
+
+@csrf_exempt
 def viewProjectBids(request):
     context = {"title":"Project Bids"}
     id = request.GET.get("id")
@@ -143,8 +161,17 @@ def viewProjectBids(request):
      
     context['required_project'] = required_project
     
+    required_freelancer = ProfilesTable.objects.get(user=request.user)
+    context["bid_submitted"] = required_project.bids.filter(created_by=required_freelancer).exists()
+    
+    
+    print(context)
     
     return render(request, 'dashboard/viewProjectBids.html',context)  
+
+
+
+
         
 
 @csrf_exempt
