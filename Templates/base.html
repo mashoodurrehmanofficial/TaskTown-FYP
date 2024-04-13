@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+{% load static %}
+{% if is_dark_theme %}
+    <html  class="loading dark-layout" lang="en" data-layout="dark-layout"  lang="en" data-textdirection="ltr">
+{% else %}
+    <html class="loading" lang="en" data-textdirection="ltr">
+{% endif %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        
+        {% if title %}
+            {{title}}
+        {% else %} 
+            TaskTwon
+        {% endif %}
+            
+    </title>   
+
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css"rel="stylesheet"/> 
+<link rel="stylesheet"  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css"/>
+
+    <link rel="shortcut icon" href="/Static/app-assets/images/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/Static/app-assets/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <script src="/Static/assets/js/jquery.js"></script>
+    <link rel="apple-touch-icon" href="/Static/app-assets/images/favicon.png"> 
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600" rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    {% comment %} <link rel="stylesheet" type="text/css" href="/Static/app-assets/vendors/css/vendors.min.css"> {% endcomment %}
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/vendors/css/forms/select/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/vendors/css/tables/datatable/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/vendors/css/tables/datatable/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/vendors/css/pickers/pickadate/pickadate.css"> 
+    <!-- END: Vendor CSS-->
+    <!-- <link rel="stylesheet" type="text/css" href="/Static/app-assets/vendors/css/file-uploaders/dropzone.min.css"> -->
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/components.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/themes/dark-layout.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/themes/bordered-layout.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/themes/semi-dark-layout.css">
+    <!-- BEGIN: Page CSS-->
+    {% if show_sidebar %}
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/core/menu/menu-types/vertical-menu.css">
+    {% else %}
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/core/menu/menu-types/horizontal-menu.css">
+    {% endif %}
+
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/pages/page-pricing.css">
+
+
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/plugins/forms/form-file-uploader.min.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/plugins/forms/form-validation.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/pages/authentication.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/plugins/forms/pickers/form-flat-pickr.css">
+    <link rel="stylesheet" type="text/css" href="/Static/app-assets/css/plugins/forms/pickers/form-pickadate.css">
+    
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="/Static/assets/css/style.css">
+
+
+
+ 
+
+
+    <style>
+        .error-text{
+            color: red !important;
+        }
+        .success-text{
+            color: rgb(0, 199, 0) !important;
+
+        }
+        .mt25{
+            margin-top: 35px !important;
+        }
+        @media screen and (max-width: 1200px) {
+            #timer {
+              display: none !important;
+            }
+          }
+
+          .mx-3{
+        margin: 0px 3% !important;
+    }
+    .card-body{
+        padding: 25px !important;
+    }
+       
+    </style> 
+</head> 
+
+
+    {% if show_sidebar %}
+        <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="">
+    {% else %}
+        <body class="horizontal-layout horizontal-menu  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="">
+    {% endif %} 
+        <!-- BEGIN: Content-->
+        {% block 'mainbody' %}
+        {% endblock 'mainbody' %}
+        <!-- END: Content-->
+
+        <script src="/Static/app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>  
+        <!-- <script src="/Static/app-assets/vendors/js/tables/datatable/responsive.bootstrap5.min.js"></script>  -->
+        <!-- <script src="/Static/app-assets/vendors/js/tables/datatable/jszip.min.js"></script> -->
+        <!-- <script src="/Static/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script> -->
+        <script src="/Static/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+        <!-- <script src="/Static/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script> -->
+        <!-- <script src="/Static/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>  -->
+        <script src="/Static/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script> 
+        <script src="/Static/app-assets/vendors/js/forms/select/select2.full.min.js"></script>  
+    
+        <script src="/Static/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
+        <script src="/Static/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
+        <script src="/Static/app-assets/vendors/js/pickers/pickadate/picker.time.js"></script>
+        <script src="/Static/app-assets/vendors/js/pickers/pickadate/legacy.js"></script>
+        <script src="/Static/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
+        <script src="/Static/app-assets/js/scripts/forms/form-select2.js"></script>
+        <script src="/Static/app-assets/js/scripts/forms/pickers/form-pickers.js"></script>
+        <!-- <script src="/Static/app-assets/js/scripts/forms/form-file-uploader.min.js"></script> -->
+        <script src="/Static/app-assets/js/scripts/pages/auth-login.js"></script> 
+
+        <script src="/Static/app-assets/vendors/js/vendors.min.js"></script>
+        <!-- BEGIN Vendor JS-->
+    
+        <!-- BEGIN: Page Vendor JS-->
+        <script src="/Static/app-assets/vendors/js/forms/wizard/bs-stepper.min.js"></script>
+        <script src="/Static/app-assets/vendors/js/forms/spinner/jquery.bootstrap-touchspin.js"></script>
+        <script src="/Static/app-assets/vendors/js/extensions/toastr.min.js"></script>
+        <!-- <script src="https://github.com/mashoodurrehmanofficial/omer-lic-player/tree/main/Static/app-assets/js/core/app-menu.js"></script> -->
+        <script src="/Static/app-assets/js/core/app-menu.js"></script>
+        <script src="/Static/app-assets/js/core/app.js"></script>
+        <script src="/Static/app-assets/js/scripts/pages/page-pricing.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" integrity="sha512-24XP4a9KVoIinPFUbcnjIjAjtS59PUoxQj3GNVpWc86bCqPuy3YxAcxJrxFCxXe4GHtAumCbO2Ze2bddtuxaRw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+        <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+
+        <script>
+            $(window).on('load', function() {
+                if (feather) {
+                    feather.replace({
+                        width: 14,
+                        height: 14
+                    });
+                }
+            })
+
+            $("#theme_changer").click(function(e){
+                var main_navbar  = $("#main_navbar") 
+                var has_class =  main_navbar.hasClass("navbar-dark")
+                $.ajax({
+                    url: "/ajax/setTheme",
+                    data: {"is_dark_theme":main_navbar.hasClass("navbar-dark")},
+                    success: function(res){ 
+                    }
+                })  
+            })
+        </script>
+</body>
+</html>

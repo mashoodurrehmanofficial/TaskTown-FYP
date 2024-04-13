@@ -1,0 +1,9 @@
+ACCESS_TOKEN = "LMzt0DMeZiWnXNmu9hUsjaKHGrb8AX"
+
+
+OPEN_AI_SECRET_KEY = "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"
+# OPEN_AI_SECRET_KEY = "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"
+# OPEN_AI_SECRET_KEY = "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"
+
+# bsef20m004@pucit.edu.pk
+# T7+'z4khJQ%-L9W

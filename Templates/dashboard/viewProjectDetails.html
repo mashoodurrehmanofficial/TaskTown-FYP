@@ -1,0 +1,41 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %}
+
+<section id="basic-datatable">
+
+
+	<div class="card">
+		<!-- <div class="card-header">
+			<h4 class="card-title">Basic Tab</h4>
+		</div> -->
+		<div class="card-body">
+			{% include 'partials/project/navigation_bar.html'   %}
+			
+			<div class="tab-content"> 
+				
+				<div>
+					<span>
+						<b style="font-size: 20px;">{{required_project.title}}</b> ({{required_project.start_date}} - {{required_project.end_date}})
+					</span>
+					
+					
+					<hr>
+					Budget: <b>${{required_project.budget}}</b>
+					<hr>
+					<span>
+						{{required_project.description}}
+					</span>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include 'partials/project/submit_propsoal_form.html'   %}
+	
+</section>
+
+ 
+<script>
+ 
+</script>
+{% endblock 'mainlayout' %}

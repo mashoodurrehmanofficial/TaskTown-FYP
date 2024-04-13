@@ -1,0 +1,59 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %}
+
+<section id="basic-datatable">
+
+
+	<div class="card">
+		<!-- <div class="card-header">
+			<h4 class="card-title">Basic Tab</h4>
+		</div> -->
+		<div class="card-body">
+			{% include 'partials/project/navigation_bar.html'   %}
+
+			<div class="tab-content"> 
+
+				
+                <div>
+                    {% for bid in required_project.bids.all %}
+                        
+                    <div class="card">
+                        <div class="card-body" style="background-color: aliceblue;">
+                            <div class="employee-task d-flex justify-content-between align-items-center">
+                                <div class="d-flex flex-row">
+                                    <div class="avatar me-75">
+                                        <img src="{{bid.}}" class="rounded" width="42" height="42" alt="Avatar">
+                                    </div>
+                                    <div class="my-auto">
+                                        <h6 class="mb-0">{{bid.created_by.username}}</h6>
+                                        <span>{{bid.proposal}}</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center" style="position: relative;">
+                                    <button type="button" class="btn btn-success waves-effect">
+                                        Award
+                                    </button>
+                                    <!-- <small class="text-muted me-75">9hr 20m</small> -->
+                                    <!-- <div class="employee-task-chart-primary-1" style="min-height: 35.7px;"><div id="apexchartsjq0w987qg" class="apexcharts-canvas apexchartsjq0w987qg apexcharts-theme-light" style="width: 30px; height: 35.7px;"><svg id="SvgjsSvg1204" width="30" height="35.699999999999996" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG1206" class="apexcharts-inner apexcharts-graphical" transform="translate(-15, -12)"><defs id="SvgjsDefs1205"><clipPath id="gridRectMaskjq0w987qg"><rect id="SvgjsRect1208" width="66" height="59" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="gridRectMarkerMaskjq0w987qg"><rect id="SvgjsRect1209" width="64" height="61" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath></defs><g id="SvgjsG1210" class="apexcharts-radialbar"><g id="SvgjsG1211"><g id="SvgjsG1212" class="apexcharts-tracks"><g id="SvgjsG1213" class="apexcharts-radialbar-track apexcharts-track" rel="1"><path id="apexcharts-radialbarTrack-0" d="M 30 17.843658536585362 A 12.156341463414638 12.156341463414638 0 1 1 29.997878318175438 17.84365872173703" fill="none" fill-opacity="1" stroke="rgba(233,236,239,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="3.952395121951219" stroke-dasharray="0" class="apexcharts-radialbar-area" data:pathOrig="M 30 17.843658536585362 A 12.156341463414638 12.156341463414638 0 1 1 29.997878318175438 17.84365872173703"></path></g></g><g id="SvgjsG1215"><g id="SvgjsG1218" class="apexcharts-series apexcharts-radial-series" seriesName="seriesx1" rel="1" data:realIndex="0"><path id="SvgjsPath1219" d="M 30 17.843658536585362 A 12.156341463414638 12.156341463414638 0 0 1 33.756516101619944 41.56136776308945" fill="none" fill-opacity="0.85" stroke="rgba(115,103,240,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="4.074634146341463" stroke-dasharray="0" class="apexcharts-radialbar-area apexcharts-radialbar-slice-0" data:angle="162" data:value="45" index="0" j="0" data:pathOrig="M 30 17.843658536585362 A 12.156341463414638 12.156341463414638 0 0 1 33.756516101619944 41.56136776308945"></path></g><circle id="SvgjsCircle1216" r="5.180143902439028" cx="30" cy="30" class="apexcharts-radialbar-hollow" fill="transparent"></circle><g id="SvgjsG1217" class="apexcharts-datalabels-group" transform="translate(0, 0) scale(1)" style="opacity: 1;"></g></g></g></g><line id="SvgjsLine1220" x1="0" y1="0" x2="60" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine1221" x1="0" y1="0" x2="60" y2="0" stroke-dasharray="0" stroke-width="0" class="apexcharts-ycrosshairs-hidden"></line></g><g id="SvgjsG1207" class="apexcharts-annotations"></g></svg><div class="apexcharts-legend"></div></div></div>
+                                <div class="resize-triggers"><div class="expand-trigger"><div style="width: 93px; height: 37px;"></div></div><div class="contract-trigger"></div></div> -->
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <hr>
+                    {% endfor %}
+                </div>
+
+
+			</div>
+		</div>
+	</div>
+ 
+</section>
+
+ 
+<script>
+ 
+</script>
+{% endblock 'mainlayout' %}

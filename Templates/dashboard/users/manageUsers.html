@@ -1,0 +1,220 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %}
+
+<section id="basic-datatable">
+
+
+
+
+	<div class="row">
+		<div class="col-12">
+			<div class="card" style="padding:0px 2%">
+				<div class="card-header border-bottom p-1">
+					<div class="head-label">
+						<h6 class="mb-0">Users Listing</h6>
+					</div>
+
+
+					<div class="dt-action-buttons text-end">
+						{% if request.user.is_superuser %}
+						<button id="delete_users_btn" type="button" class="btn btn-danger waves-effect">
+							<i class="me-50" data-feather="trash"></i>
+							<span>Delete Users</span>
+						</button>
+						<!-- <a href="{%url 'addNewUser'%}" type="button" class="btn btn-primary waves-effect">
+								<i class="me-50" data-feather="plus"></i>
+								<span>Add New User</span>
+							</a> -->
+						<div class="dt-buttons d-inline-flex">
+							<a type="button" class="btn btn-primary" id="clear_filter_btn">
+								Clear Filter
+							</a>
+						</div>
+
+						{% else %}
+
+						{% endif %}
+
+
+
+					</div>
+				</div>
+
+
+				<div class="row" id="basic-table">
+					<div class="col-12">
+						<div class="card">
+							<div class="table-responsive">
+								<div class="row m-0">
+									<div class="col-md-3 col-12">
+										<div class="mb-1">
+											<label class="form-label" for="username">Username</label>
+											<input type="text" id="username" class="form-control filter_input_query"
+												placeholder="Username" name="username">
+										</div>
+									</div>
+									<div class="col-md-3 col-12">
+										<div class="mb-1">
+											<label class="form-label" for="key">Email</label>
+											<input type="text" id="email" class="form-control filter_input_query"
+												placeholder="Email" name="email">
+										</div>
+									</div>
+									<div class="col-md-3 col-12">
+										<div class="mb-1">
+											<label class="form-label" for="date_joined">Date Joined</label>
+											<input type="date" id="date_joined" class="form-control filter_input_query"
+												placeholder="Date Joined" name="date_joined">
+										</div>
+									</div>
+
+
+
+
+									<div class="col-md-3 col-12">
+										<div class="mb-1">
+											<label class="form-label" for="membership_category">Membership</label>
+											<select class="form-select filter_input_query" id="membership_category"
+												name="membership_category">
+												<option></option>
+												{% for membership_type in available_membership_types %}
+												{% if required_profile.membership_category == membership_type %}
+												<option value="{{membership_type}}" selected>{{membership_type}}
+												</option>
+												{% else %}
+												<option value="{{membership_type}}">{{membership_type}}</option>
+												{% endif %}
+												{% endfor %}
+											</select>
+										</div>
+									</div>
+
+								</div>
+								<table class="table mt-1">
+									<thead>
+										<tr>
+											<th style="padding-right:0px !important;width:30px !important">
+												<div class="form-check form-check-inline  ">
+													<input class="form-check-input  " type="checkbox"
+														id="users_table_checkbox_parent" value="unchecked">
+												</div>
+											</th>
+											<th>ID</th>
+											<th>User Name</th>
+											<th>Email</th>
+											<th>Join Date</th>
+											<th>Membership</th>
+											<th>Role</th>
+											{% if profile.role == USER_ROLE_SUPER_ADMIN_KEYWORD %}
+											<th>Edit</th>
+												
+											{% endif %}
+										</tr>
+									</thead>
+									<tbody>
+
+										{% for user in available_users %}
+										<tr id="{{user.id}}" class="user_tr">
+											<td>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input users_table_checkbox_child"
+														type="checkbox" id="{{user.id}}" value="unchecked">
+												</div>
+											</td>
+											<td> {{ forloop.counter }} </td>
+											<td> {{user.username}}</td>
+											<td>{{user.email}}</td>
+											<td>{{user.date_joined }}</td>
+											<td>{{user.profile.membership_category}}</td>
+											<td>{{user.profile.role}}</td>
+											{% if profile.role == USER_ROLE_SUPER_ADMIN_KEYWORD %}
+												
+											<td> <a href="{%url 'editUser'%}?id={{user.id}}"
+													class="btn btn-primary waves-effect">
+													<i class="me-50" data-feather="edit"></i>
+													<span>Edit</span>
+												</a> </td>
+											{% endif %}
+
+
+										</tr>
+
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+
+<script>
+	populateTableCheckBoxes('users_table_checkbox_parent', 'users_table_checkbox_child')
+
+	var available_users = JSON.parse(`{{json_available_users |safe}}`);
+
+	var target_rows = $(".user_tr")
+	$('.filter_input_query').on('keyup change', function (e) {
+		var username = $('#username').val().replace("  ", '').toLowerCase()
+		var email = $('#email').val().replace("  ", '').toLowerCase()
+		var date_joined = $('#date_joined').val().replace("  ", '').toLowerCase()
+		var membership_category = $('#membership_category').val().replace("  ", '').toLowerCase() 
+		for (var i = 0; i < target_rows.length; i++) {
+			var current_record_id = $(target_rows[i]).prop('id')
+			var current_record = available_users[i]
+			var record_username = current_record.username ? current_record.username : ''
+			var record_email = current_record.email ? current_record.email : ''
+			var record_membership_category = current_record.profile.membership_category ? current_record.profile.membership_category : ''
+			if (
+				record_username.toLowerCase().includes(username) &&
+				record_email.toLowerCase().includes(email) &&
+				current_record.date_joined.toLowerCase().includes(date_joined) &&
+				record_membership_category.toLowerCase().includes(membership_category)
+			) {
+				$(target_rows[i]).show()
+			} else {
+				$(target_rows[i]).hide()
+			}
+		}
+	})
+
+	$("#clear_filter_btn").click(function (e) {
+		$('#username').val('')
+		$('#email').val('')
+		$('#date_joined').val('')
+		$('#membership_category').val('')
+		for (var i = 0; i < target_rows.length; i++) {
+			$(target_rows[i]).show()
+		}
+	})
+
+
+	$("#delete_users_btn").click(function () {
+		var ids = getSelectedChildIds('users_table_checkbox_child')
+		console.log(ids)
+		if (ids.length < 1) {
+			alert("Please select atleast one User")
+			return
+		}
+		var decision = confirm("Are you sure to delete selected User ?")
+		if (!decision) {
+			e.preventDefault()
+			return
+		}
+
+		$.ajax({
+			url: `{%url 'deleteUsers'%}?ids=${ids}`,
+			dataType: 'json',
+			success: function (res) {
+				window.location.reload()
+			}
+		})
+	})
+
+</script>
+{% endblock 'mainlayout' %}

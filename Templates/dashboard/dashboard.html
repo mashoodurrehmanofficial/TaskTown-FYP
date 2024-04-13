@@ -1,0 +1,205 @@
+{% extends 'partials/dashboard_layout.html' %} 
+
+{% block 'mainlayout' %}
+<style>
+    .btn-floating {
+    position: fixed;
+    bottom: 6%;
+    right: 20px;
+    z-index: 1000;
+    border-radius: 50%;
+    padding: 15px;
+    width: 70px !important;
+    height: 65px !important;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  } 
+
+  .popup {
+    display: none;
+    position: fixed;
+    bottom: 8rem;
+    right: 20px;
+    /* width: 90%; */
+    height: auto;
+    z-index: 999;
+    margin: auto;
+    overflow: auto; 
+    box-sizing: border-box; 
+    padding: 5px;
+    background-color: rgb(134, 134, 134) !important;
+    border-radius: 10px;
+  }
+  
+  
+  
+  </style>
+
+{% if available_headlines %} 
+    {% for headline in available_headlines %} 
+        <div class="card alert alert-{{headline.theme}}" role="alert">
+            <div class="card-body">
+                {{headline.title}}
+            </div> 
+        </div>  
+    {% endfor %} 
+  
+    
+{% endif %}
+
+<h4>Dashboard</h4>
+
+
+<a href="#" class="btn btn-primary btn-floating" role="button">
+    <i class="fas fa-robot"></i>
+  </a>
+  
+ <div class="row">
+    <div class="col col-md-8 col-lg-4 col-sm-10">
+        <div class="popup ">   
+            {% include "partials/chatbox.html" %}
+      </div>
+    </div>
+ </div>
+  
+
+
+
+
+
+<div class="row match-height"> 
+    <div class="col-lg-4 col-md-6 col-12">
+        <div class="card  ">
+            <div class="card-header">
+                <h4 class="card-title">Recent Tickets</h4>
+            </div>
+            <div class="d-flex flex-column justify-content-between mb-1" style=" height: 300px">
+
+                <table class="table  " id="connection_keys_listing_table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Title</th>
+                            <!-- <th>Reference</th>   -->
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for ticket in available_tickets %}
+                        <tr id="{{ticket.id}}" class="ticket_tr">
+                            <td> {{ forloop.counter }} </td>
+                            <td> <a href="{ }?id={{ticket.id}}">{{ticket.title}} </a> </td>
+                            <!-- <td>{{ticket.reference_number}}</td>   -->
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <a href="{ }" class="btn btn-primary mx-2">View All</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-12">
+        <div class="card  ">
+            <div class="card-header">
+                <h4 class="card-title">Shared Files</h4>
+            </div>
+            <div class="d-flex flex-column justify-content-between mb-1" style=" height: 300px">
+                <table class="table" id="connection_keys_listing_table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>File Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for file in available_files %}
+                        <tr id="{{file.id}}" class="ticket_tr">
+                            <td> {{ forloop.counter }} </td>
+                            <td> {{file.orignal_file_name}} </td>
+                            <td> <a href="{ }?id={{file.id}}" target="_blank"><i class="me-50"
+                                        data-feather='download'></i> </a> </td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <a href="{}" class="btn btn-primary mx-2">View All</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-12">
+        <div class="card  ">
+            <div class="card-header">
+                <h4 class="card-title">Statistics</h4>
+            </div>
+            <div class="d-flex flex-column justify-content-between mb-1" style=" height: 300px">
+
+
+                <div class="d-flex flex-row justify-content-around"> 
+
+                    <div class="card card-tiny-line-stats">
+                        <div class="card-body pb-50" style="position: relative;">
+                            <h6>Ongoing</h6>
+                            <h2 class="fw-bolder mb-1">{{total_files}}</h2> 
+                        </div>
+                    </div>
+
+                    <div class="card card-tiny-line-stats">
+                        <div class="card-body pb-50" style="position: relative;">
+                            <h6>Resolved</h6>
+                            <h2 class="fw-bolder mb-1">{{total_tickets}}</h2> 
+                        </div>
+                    </div>
+                    
+
+                    
+                </div> 
+                <div class="d-flex flex-row justify-content-around"> 
+                
+
+                    <div class="card card-tiny-line-stats">
+                        <div class="card-body pb-50" style="position: relative;">
+                            <h6>Total Tickets</h6>
+                            <h2 class="fw-bolder mb-1">{{total_tickets}}</h2> 
+                        </div>
+                    </div>
+                    <div class="card card-tiny-line-stats">
+                        <div class="card-body pb-50" style="position: relative;">
+                            <h6>Total Files</h6>
+                            <h2 class="fw-bolder mb-1">{{total_files}}</h2> 
+                        </div>
+                    </div>
+                    
+
+                </div> 
+                
+                 
+ 
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+    $(document).ready(function() {
+        $(".btn-floating").click(function() {
+            $(".popup").toggle();
+            $(this).find("i").toggleClass("fa-robot fa-times").fadeOut(0).fadeIn(400);
+          });
+      });
+      
+</script>
+
+{% endblock 'mainlayout' %}

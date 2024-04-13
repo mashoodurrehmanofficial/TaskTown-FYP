@@ -1,0 +1,41 @@
+{% extends 'partials/dashboard_layout.html' %} 
+{% block 'mainlayout' %} 
+
+ 
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Upload Files</h4>
+            </div>
+            <div class="card-body"> 
+                
+                <div class="d-flex justify-content-between">
+
+                    <button id="clear-dropzone" class="btn btn-outline-primary mb-1 waves-effect">
+                        <i class="me-50" data-feather="trash"></i> 
+                        <span class="align-middle">Clear Dropzone</span>
+                    </button>
+
+                    <button id="submit_form_btn" class="btn btn-primary mb-1 waves-effect">
+                        <i class="me-50" data-feather="upload"></i> 
+                        <span class="align-middle">Upload</span>
+                    </button>
+                </div>
+
+                <form action="{% url 'uploadFiles' %}" method="post" class="dropzone dropzone-area dz-clickable" id="dpz-remove-all-thumb">{%csrf_token %}
+                    <div class="dz-message">Drop files here or click to upload.</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+
+<script>
+   
+</script>
+{% endblock 'mainlayout' %}
+
+
+ 

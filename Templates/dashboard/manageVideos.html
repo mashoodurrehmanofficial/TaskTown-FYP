@@ -1,0 +1,186 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %}
+<style>
+    .thumbnail{
+        border-radius: 60%;
+            width: 60px; /* Adjust the width as needed */
+            height: 60px; 
+
+    }
+</style>
+
+<section id="basic-datatable">
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card" style="padding:0px 2%">
+                <div class="card-header border-bottom p-1">
+                    <div class="head-label">
+                        <h6 class="mb-0">Tickets Listing</h6>
+                    </div>
+
+
+                    <div class="dt-action-buttons text-end">
+                        <!-- <div class="d-inline-flex"> 
+                <input onkeyup="connectionKeyListingTableQueryFilter(2)" type="text" id="query_connection_name" class="form-control" placeholder="Search Name" name="query_connection_name"  value="" >
+            </div>  -->
+
+                        <div class="dt-buttons d-inline-flex">
+                            <a type="button" class="btn btn-info" id="clear_filter_btn">
+                                Clear Filter
+                            </a>
+                        </div>
+
+                        {% if profile.role == USER_ROLE_SUPER_ADMIN_KEYWORD %}
+                        <a href="{%url 'addNewVideo'%}" type="button" class="btn btn-primary waves-effect">
+                            <i class="me-50" data-feather="plus"></i>
+                            <span>Add new Video</span>
+                        </a>
+                                                
+                        {% endif %}
+
+
+                    </div>
+                </div>
+
+
+
+                <div class="row" id="basic-table">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="table-responsive">
+
+                                <div class="row m-0">
+                                    <div class="col-md-12 col-12">
+                                        <div class="mb-1">
+                                            <label class="form-label" for="title">Video Title </label>
+                                            <input type="text" id="title" class="form-control filter_input_query"
+                                                placeholder="Title" name="username">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table mt-1" id="videos_listing_table">
+                                    <thead>
+                                        <tr>
+                                            <th style="padding-right:0px !important;width:30px !important">
+                                                <div class="form-check form-check-inline  ">
+                                                    <input class="form-check-input  " type="checkbox"
+                                                        id="video_table_checkbox_parent" value="unchecked">
+                                                </div>
+                                            </th>
+                                            <th>No.</th>
+                                            <th>Thumbnail</th>
+                                            <th>Title</th>
+                                            <th>Membership</th>
+                                            <th>Total Users</th>
+                                            <th>Options</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        {% for video in available_videos %}
+                                        <tr id="{{video.id}}" class="video_tr">
+                                            <td>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input video_table_checkbox_child"
+                                                        type="checkbox" id="{{video.id}}" value="unchecked">
+                                                </div>
+                                            </td>
+                                            <td> {{ forloop.counter }} </td>
+                                            <td>
+                                                <img class="thumbnail" src="{{video.thumbnail_url}}" alt="">
+                                            </td>
+                                            <td> {{ video.title }} </td>
+                                            <td> {{ video.membership_category }} </td>
+                                            <td> {{ video.total_users }} </td>
+                                            
+                                            <td>
+                                            {% if profile.role == USER_ROLE_SUPER_ADMIN_KEYWORD %}
+                                                <a href="{%url 'editVideo'%}?id={{video.id}}" class="btn btn-primary waves-effect"><i  class="me-50 " data-feather='edit'></i>Edit</a>
+                                            {% endif %}
+
+
+                                            {% if video.video_url %}
+                                                <a href="{{video.video_url}}" class="btn btn-warning waves-effect" target="_blank"><i  class="me-50 " data-feather='download'></i>Download Video</a>
+                                            {% endif %}
+                                            </td>  
+
+
+                                        </tr>
+
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+    var available_tickets = JSON.parse(`{{json_available_tickets |safe}}`);
+
+    var target_rows = $(".video_tr")
+
+
+
+
+
+    $('.filter_input_query').on('keyup change', function (e) {
+        var title = $('#title').val().replace("  ", '').toLowerCase()
+        var reference_number = $('#reference_number').val().replace("  ", '').toLowerCase()
+        var issued_date = $('#issued_date').val().replace("  ", '').toLowerCase()
+        var is_resolved = $('#status').val().replace("  ", '') == "Resolved"
+
+        for (var i = 0; i < target_rows.length; i++) {
+            var current_record_id = $(target_rows[i]).prop('id')
+            var current_record = available_tickets[i]
+            var record_title = current_record.title ? current_record.title : ''
+            var record_reference_number = current_record.reference_number ? current_record.reference_number : ''
+            var record_status = current_record.resolved ? current_record.resolved : false
+            var record_issued_date = current_record.timestamp ? current_record.timestamp : ''
+
+
+            if (
+                record_title.toLowerCase().includes(title) &&
+                record_reference_number.toLowerCase().includes(reference_number) &&
+                record_issued_date.toLowerCase().includes(issued_date) &&
+                record_status == is_resolved
+            ) {
+                $(target_rows[i]).show()
+            } else {
+                $(target_rows[i]).hide()
+            }
+        }
+    })
+
+    $("#clear_filter_btn").click(function (e) {
+        $('#title').val('')
+        $('#reference_number').val('')
+        $('#issued_date').val('')
+        $('#status').val('')
+        for (var i = 0; i < target_rows.length; i++) {
+            $(target_rows[i]).show()
+        }
+    })
+
+
+    $(document).ready(function () {
+        $('.ticket_status').click(function () {
+            var ticket_id = $(this).data('ticket_id');
+            $.ajax({
+                url: `{%url 'changeTicketStatus'%}?id=${ticket_id}`,
+                dataType: 'json',
+                success: function (res) {
+                }
+            })
+        });
+    });
+</script>
+{% endblock 'mainlayout' %}

@@ -1,0 +1,189 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %}
+
+
+<div>
+    <div class="">
+        <div class="card">
+            <div class="card-header">
+                <!-- <div>
+                    <h4 class="card-title">Manage Profile</h4>
+                    <span class="card-subtitle text-muted">Commercial networks and enterprises</span>
+                </div> -->
+            </div>
+
+
+            {% if message %}
+            <center>
+                <h4 class="text-success"><b>{{message}}</b></h4>
+            </center>
+            {% endif %}
+
+            <div class="card-body">
+                <div class="d-flex  justify-content-between">
+                    <h3><b>Hello {{profile.username}} 👋</b></h3>
+                    <a class="btn btn-primary"   href="{%url 'makePaymentSessionLink'%}">Add Balance</a>
+                </div>
+                
+                <div class="dropdown-divider"></div> 
+                <form action="{% url 'manageAccount' %}" method="post"> {% csrf_token %}
+                    <div class="row">
+                        <div class="mb-1 col-12 col-md-4"> 
+                            <label class="form-label" for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter New Username"  required value="{{profile.username}}">
+                        </div>
+                        
+                        <div class="mb-1 col-12 col-md-4"> 
+                            <label class="form-label" for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter New Email"  required value="{{profile.user.email}}" readonly>
+                        </div>
+                        <div class="mb-1 col-12 col-md-4">
+                            <label class="form-label" for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Enter New Password" value="{{profile.password}}" required>
+                        </div>
+                    </div>
+
+
+                    {% if profile.type == USER_ROLE_FREELANCER_KEYWORD %}
+                        <h4 class="card-title">Skills</h4> 
+                        <div class="row">
+                            {% for skill in available_skills %}
+                            <div class="mb-1 col-12 col-md-3"> 
+                                <div class="form-check form-check-inline">
+                                    {% if skill in profile.skills.all %}
+                                    <input class="form-check-input" type="checkbox" id="{{skill.id}}"  name="skill_{{skill.id}}" checked>
+                                        
+                                    {% else %}
+                                    <input class="form-check-input" type="checkbox" id="{{skill.id}}"  name="skill_{{skill.id}}">
+                                        
+                                    {% endif %}
+                                    <label class="form-check-label" for="{{skill.id}}">{{skill.name}}</label>
+                                </div> 
+                            </div>  
+                            {% endfor %}
+                        </div>  
+                        
+                    {% endif %}
+
+
+                    <button class="btn w-100 btn-primary waves-effect waves-float waves-light " id="update_profile_form_submit_btn" type="submit">Update Profile</button>
+                </form>
+
+                <div class="dropdown-divider"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+   
+{% if profile.type == USER_ROLE_FREELANCER_KEYWORD %}
+<div>
+    <div class="">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h4 class="card-title">Experience</h4>
+                    <!-- <span class="card-subtitle text-muted">Commercial networks and enterprises</span> -->
+                </div>
+                
+					<div class="dt-action-buttons text-end"> 
+						<div class="dt-buttons d-inline-flex">
+							<a type="button" class="btn btn-primary" id="clear_filter_btn" data-bs-toggle="collapse" href="#experience_collapse" role="button">
+								<i class="me-50" data-feather="plus"></i>
+								<span>Add New Experience</span>
+							</a>
+						</div>
+                    </div> 
+                </div> 
+                
+                <div class="card-body"> 
+                    <div class="collapse" id="experience_collapse" > 
+                        <form action="{% url 'addNewExperience' %}" method="post">
+                            <div class="row">
+                                <div class="mb-1 col-12 col-md-6"> 
+                                    <label class="form-label" for="title">Title</label>
+                                    <input type="text" class="form-control" id="title" name="title" placeholder="Title"  required >
+                                </div>
+                                
+                                <div class="mb-1 col-12 col-md-3"> 
+                                    <label class="form-label" for="start_date">Title</label>
+                                    <input type="date" class="form-control" id="start_date" name="start_date" placeholder="Start Date"  required  >
+                                </div>
+                                <div class="mb-1 col-12 col-md-3"> 
+                                    <label class="form-label" for="end_date">Title</label>
+                                    <input type="date" class="form-control" id="end_date" name="end_date" placeholder="End Date"  required  >
+                                </div>
+                                
+                                
+                                <div class="mb-1 col-12 col-md-12">  
+                                    <button class="btn  w-100 btn-primary waves-effect waves-float waves-light   " type="submit">Submit</button>
+                                </div>
+    
+                            
+                            </div>
+                        </form> 
+                    </div> 
+
+                <div class="row">
+                    {% for experience in profile.experience.all %}
+                    <div class="mb-1 col-12 col-md-12"> 
+                        <hr>
+                        <div class="row">
+
+                            <span  class="col-12 col-md-10">
+                                <b>{{experience.title}}</b> ({{experience.start_date}} - {{experience.end_date}})
+                            </span> 
+                            <span  class="col-12 col-md-2">
+                                <a href="{%url 'deleteExperience'%}?id={{experience.id}}" class="btn  btn-danger"  >Remove</a>
+
+                            </span>  
+                        </div>
+                     </div>  
+                    {% endfor %}
+                </div>  
+  
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% else %}
+    
+{% endif %}
+   
+
+<script>
+    $("#update_profile_form_submit_btn").click(function (e) {
+        if ($("#password").val().length < 3) {
+            e.preventDefault(); //
+            return alert("Password must be at least 8 characters")
+        }
+    })
+
+   
+
+    $("#setup_qr_code_btn").click(function(e){
+        var verification_code = $("#verification_code").val()
+        if (verification_code.length !=6) {
+            e.preventDefault()
+            return alert("Code must be 6 characters")
+
+        }
+        $.ajax({
+            url: ` ?code=${verification_code}`,
+            success: function (res){ 
+                if(res.error) {
+                    alert(res.error)
+                }else{
+                    window.location.reload()
+                }
+            }
+        })
+    })
+</script>
+
+{% endblock 'mainlayout' %}

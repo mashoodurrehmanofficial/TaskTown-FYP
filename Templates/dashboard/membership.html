@@ -1,0 +1,186 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %} 
+
+<div class="content-wrapper   p-0">
+    <div class="content-header row">
+    </div>
+    <div class="content-body">
+        
+        <section id="pricing-plan">
+          
+            <!-- title text and switch button -->
+            <div class="text-center">
+                <h1 class=" ">Pricing Plans</h1>
+                <p class="mb-2 pb-75">
+                    All plans include 40+ advanced tools and features to boost your product. Choose the best plan to fit your needs.
+                </p> 
+            </div>
+            <!--/ title text and switch button -->
+
+            <!-- pricing plan cards -->
+            <div class="row pricing-card" style="margin: 0% 10%;">
+                <div class="col-12    col-md-12  ">
+                    <div class="row"> 
+
+                        <!-- basic plan -->
+                        <div class="col-12 col-md-4">
+                            <div class="card standard-pricing popular text-center">
+                                <div class="card-body">
+                                    <!-- <div class="pricing-badge text-end">
+                                        <span class="badge rounded-pill badge-light-primary">Popular</span>
+                                    </div> -->
+                                    <!-- <img src="/Static/app-assets/images/illustration/Pot2.svg" class="mb-1" alt="svg img"> -->
+                                    <h3>Basic</h3>
+                                    <p class="card-text">For small to medium businesses</p>
+                                    <div class="annual-plan">
+                                        <div class="plan-price mt-2">
+                                            <sup class="font-medium-1 fw-bold text-primary">£</sup>
+                                            <span class="pricing-standard-value fw-bolder text-primary">20</span>
+                                            <sub class="pricing-duration text-body font-medium-1 fw-bold">/month</sub>
+                                        </div>
+                                        <!-- <small class="annual-pricing text-muted">USD 480 / year</small> -->
+                                    </div>
+                                    <ul class="list-group list-group-circle text-start">
+                                        <li class="list-group-item">Unlimited responses</li>
+                                        <li class="list-group-item">Unlimited forms and surveys</li>
+                                        <li class="list-group-item">Instagram profile page</li>
+                                        <li class="list-group-item">Google Docs integration</li>
+                                        <li class="list-group-item">Custom “Thank you” page</li>
+                                    </ul>
+                                     
+                                    {% if required_profile.membership_category and required_profile.membership_category != '-' and  required_profile.membership_category == MEMBERSHIP_CATEGORY_BASIC_KEYWORD  %}  
+                                        <button class="btn w-100 manage_billing_btn btn-success mt-2 waves-effect waves-float waves-light"  data-price_id="{{STRIPE_BASIC_PLAN_ID}}">Manage Billing</button>
+                                    {% else %}
+                                        {% if required_profile.membership_category %}
+                                            
+                                        <button class="btn w-100 checkout_btn btn-outline-primary mt-2 waves-effect waves-float waves-light" data-price_id="{{STRIPE_BASIC_PLAN_ID}}" disabled>Buy Plan</button>
+                                        {% else %}
+                                            
+                                        <button class="btn w-100 checkout_btn btn-outline-primary mt-2 waves-effect waves-float waves-light" data-price_id="{{STRIPE_BASIC_PLAN_ID}}">Buy Plan</button>
+                                        {% endif %}
+                                    {% endif %}
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ basic plan -->
+
+                        <!-- Standard plan -->
+                        <div class="col-12 col-md-4">
+                            <div class="card enterprise-pricing text-center">
+                                <div class="card-body">
+                                    <!-- <img src="/Static/app-assets/images/illustration/Pot3.svg" class="mb-2" alt="svg img"> -->
+                                    <h3>Standard</h3>
+                                    <p class="card-text">Solution for big organizations</p>
+                                    <div class="annual-plan">
+                                        <div class="plan-price mt-2">
+                                            <sup class="font-medium-1 fw-bold text-primary">£</sup>
+                                            <span class="pricing-enterprise-value fw-bolder text-primary">40</span>
+                                            <sub class="pricing-duration text-body font-medium-1 fw-bold">/month</sub>
+                                        </div>
+                                        <!-- <small class="annual-pricing text-muted">USD 960 / year</small> -->
+                                    </div>
+                                    <ul class="list-group list-group-circle text-start">
+                                        <li class="list-group-item">PayPal payments</li>
+                                        <li class="list-group-item">Logic Jumps</li>
+                                        <li class="list-group-item">File upload with 5GB storage</li>
+                                        <li class="list-group-item">Custom domain support</li>
+                                        <li class="list-group-item">Stripe integration</li>
+                                    </ul> 
+                                    {% if required_profile.membership_category and required_profile.membership_category != '-' and  required_profile.membership_category == MEMBERSHIP_CATEGORY_STANDARD_KEYWORD %}  
+                                        <button class="btn w-100 manage_billing_btn btn-success mt-2 waves-effect waves-float waves-light "  data-price_id="{{STRIPE_STANDARD_PLAN_ID}}">Manage Billing</button>
+                                    {% else %}
+                                    {% if required_profile.membership_category %}
+                                    <button class="btn w-100 checkout_btn btn-outline-primary mt-2 waves-effect waves-float waves-light" data-price_id="{{STRIPE_STANDARD_PLAN_ID}}" disabled>Buy Plan</button>
+                                        
+                                    {% else %}
+                                        
+                                    <button class="btn w-100 checkout_btn btn-outline-primary mt-2 waves-effect waves-float waves-light" data-price_id="{{STRIPE_STANDARD_PLAN_ID}}">Buy Plan</button>
+                                    {% endif %}
+                                    {% endif %}
+                                 
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ Standard plan -->
+
+                        
+                        <!-- Premium plan -->
+                        <div class="col-12 col-md-4">
+                            <div class="card enterprise-pricing text-center">
+                                <div class="card-body">
+                                    <!-- <img src="/Static/app-assets/images/illustration/Pot3.svg" class="mb-2" alt="svg img"> -->
+                                    <h3>Premium</h3>
+                                    <p class="card-text">Solution for big organizations</p>
+                                    <div class="annual-plan">
+                                        <div class="plan-price mt-2">
+                                            <sup class="font-medium-1 fw-bold text-primary">£</sup>
+                                            <span class="pricing-enterprise-value fw-bolder text-primary">80</span>
+                                            <sub class="pricing-duration text-body font-medium-1 fw-bold">/month</sub>
+                                        </div>
+                                        <!-- <small class="annual-pricing text-muted">USD 960 / year</small> -->
+                                    </div>
+                                    <ul class="list-group list-group-circle text-start">
+                                        <li class="list-group-item">PayPal payments</li>
+                                        <li class="list-group-item">Logic Jumps</li>
+                                        <li class="list-group-item">File upload with 5GB storage</li>
+                                        <li class="list-group-item">Custom domain support</li>
+                                        <li class="list-group-item">Stripe integration</li>
+                                    </ul> 
+                                    {% if required_profile.membership_category and required_profile.membership_category != '-' and  required_profile.membership_category == MEMBERSHIP_CATEGORY_PREMIUM_KEYWORD %}  
+                                            <button class="btn w-100 manage_billing_btn btn-success mt-2 waves-effect waves-float waves-light "  data-price_id="{{STRIPE_PREMIUM_PLAN_ID}}">Manage Billing</button>
+                                    {% else %}
+                                    {% if required_profile.membership_category %}
+                                        
+                                    <button class="btn w-100 checkout_btn btn-outline-primary mt-2 waves-effect waves-float waves-light"   data-price_id="{{STRIPE_PREMIUM_PLAN_ID}}" disabled>Buy Plan</button>
+                                    {% else %}
+                                    <button class="btn w-100 checkout_btn btn-outline-primary mt-2 waves-effect waves-float waves-light"   data-price_id="{{STRIPE_PREMIUM_PLAN_ID}}">Buy Plan</button>
+                                        
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ Premium plan -->
+                    </div>
+                </div>
+            </div>
+            <!--/ pricing plan cards -->
+  
+        </section>
+
+    </div>
+</div>
+
+<script>
+
+
+    $(".manage_billing_btn").click(function(e){
+        $.ajax({
+            url: `{%url 'createMembershipManagementSession'%}`, 
+            success: function(res){
+                window.location.href = res.url;
+            }
+        })
+    })
+    
+
+    $(".checkout_btn").click(function(e){ 
+        var price_id = $(this).data("price_id")  
+        $.ajax({
+            url: `{%url 'createCheckoutSession'%}?price_id=${price_id}`, 
+            success: function(res){
+                console.log(res)
+                window.location = res.url
+            }
+        })
+    }) 
+
+
+
+
+
+ 
+</script>
+ 
+{% endblock 'mainlayout' %}

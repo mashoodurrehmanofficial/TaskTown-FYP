@@ -1,0 +1,95 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %}
+
+
+<section id="multiple-column-form">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title"> 
+                        {% if required_user.id %}
+                            Edit User
+                        {% else %}
+                            Add New User
+                        {% endif %} 
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form class="form" action="{%url 'editUser'%}?id={{required_user.id}}"  method="post" > {% csrf_token %}
+                        <div class="row"> 
+  
+                                <div class="col-md-6 col-12">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="name">Username</label>
+                                        <input type="text" id="username" class="form-control filter_input_query" placeholder="Username" name="username"  value="{{required_user.username}}" readonly >
+                                    </div>
+                                </div>       
+                                 <div class="col-md-6 col-12">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="name">Email</label>
+                                        <input type="email" id="title" class="form-control filter_input_query" placeholder="Email" name="email"  value="{{required_user.email}}" readonly>
+                                    </div>
+                                </div>       
+                                
+                                
+                                <div class="col-md-6 col-12"> 
+                                    <div class="mb-1">
+                                        <label class="form-label" for="membership_category">Membership</label>
+                                        <select class="form-select" id="membership_category" name="membership_category">
+                                            <!-- <option></option> -->
+                                            {% for membership_type in available_membership_types %}
+                                                {% if required_profile.membership_category == membership_type %}
+                                                    <option value="{{membership_type}}" selected>{{membership_type}}</option>
+                                                {% else %}    
+                                                    <option value="{{membership_type}}">{{membership_type}}</option>
+                                                {% endif %} 
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>     
+   
+                                
+                                <div class="col-md-6 col-12"> 
+                                    <div class="mb-1">
+                                        <label class="form-label" for="membership_category">Role</label>
+                                        <select class="form-select" id="membership_category" name="role">
+                                            <!-- <option></option> -->
+                                            {% for role in available_roles %}
+                                                {% if required_profile.role == role %}
+                                                    <option value="{{role}}" selected>{{role}}</option>
+                                                {% else %}    
+                                                    <option value="{{role}}">{{role}}</option>
+                                                {% endif %} 
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>     
+
+                             
+                                
+ 
+                            <div class="col-12"> 
+                                <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
+                                <button type="submit" class="btn btn-primary me-1 waves-effect waves-float waves-light">Save </button>
+                                <!-- <button type="submit" class="btn btn-primary me-1 waves-effect waves-float waves-light">Save and Return</button> -->
+                            </div> 
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+ 
+
+{% block 'jsblock' %}
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js" integrity="sha256-yE5LLp5HSQ/z+hJeCqkz9hdjNkk1jaiGG0tDCraumnA=" crossorigin="anonymous"></script>
+<script>  
+ 
+ 
+</script>
+{% endblock 'jsblock' %} 
+{% endblock 'mainlayout' %}

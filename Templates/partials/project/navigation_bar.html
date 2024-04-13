@@ -1,0 +1,33 @@
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+        {% if title == "Project Details" %}
+        <a class="nav-link active" href="{%url 'viewProject'%}?id={{required_project.id}}" aria-controls="Details" role="tab" aria-selected="true">Details</a>
+        
+        {% else %}
+        
+        <a class="nav-link " href="{%url 'viewProject'%}?id={{required_project.id}}" aria-controls="Details" role="tab" aria-selected="true">Details</a>
+        {% endif %}
+    </li>
+
+
+    <li class="nav-item">
+
+        {% if title == "Project Bids" %}
+        <a class="nav-link active"  href="{%url 'viewProjectBids'%}?id={{required_project.id}}" aria-controls="bids" role="tab" aria-selected="false">Bids</a>
+        
+        {% else %}
+        <a class="nav-link "  href="{%url 'viewProjectBids'%}?id={{required_project.id}}" aria-controls="bids" role="tab" aria-selected="false">Bids</a>
+            
+        {% endif %}
+    </li>
+     
+    <li class="nav-item">
+        {% if  title == "Project Reviews" %}
+        <a class="nav-link active"   href="{%url 'viewProject'%}?id={{required_project.id}}" aria-controls="reviews" role="tab" aria-selected="false">Reviews</a>
+            
+        {% else %}
+        <a class="nav-link"   href="{%url 'viewProject'%}?id={{required_project.id}}" aria-controls="reviews" role="tab" aria-selected="false">Reviews</a>
+            
+        {% endif %}
+    </li>
+</ul>

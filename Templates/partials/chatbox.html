@@ -1,0 +1,322 @@
+<style>
+    .chat-app-window .active-chat .chat-header {
+        height: 0px !important;
+    }
+
+    .chat-app-window .user-chats {
+        height: calc(100% - 65px) !important;
+    }
+
+    .mr-10px {
+        margin-right: 10px !important
+    }
+
+    .w-5px {
+        width: 5px !important
+    }
+
+    .p-5px {
+        padding: 5px !important
+    }
+</style>
+
+
+
+
+<div class="app-content content chat-application m-0 p-0">
+    <div class="content-area-wrapper ">
+        <div class="content-right" style="width: 100%;">
+            <div class="content-wrapper container-xxl p-0">
+                <div class="content-header row">
+                </div>
+                <div class="content-body">
+                    <div class="body-content-overlay"></div>
+                    <!-- Main chat area -->
+                    <section class="chat-app-window">
+                        <!-- To load Conversation -->
+                        <div class="start-chat-area d-none">
+                            <div class="mb-1 start-chat-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-message-square">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </div>
+                            <h4 class="sidebar-toggle start-chat-text">Start Conversation</h4>
+                        </div>
+                        <!--/ To load Conversation -->
+
+                        <!-- Active Chat -->
+                        <div class="active-chat">
+                            <!-- Chat Header -->
+                            <div class="chat-navbar">
+                                <header class="chat-header">
+                                </header>
+                            </div>
+                            <!--/ Chat Header -->
+
+                            <!-- User Chat messages -->
+                            <div class="user-chats ps ps--active-y">
+                                <div class="chats">
+
+
+                                </div>
+                                <div class="ps__rail-x" style="left: 0px; bottom: -676px;">
+                                    <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                                </div>
+                                <div class="ps__rail-y" style="top: 676px; right: 0px; height: 140px;">
+                                    <div class="ps__thumb-y" tabindex="0" style="top: 116px; height: 24px;"></div>
+                                </div>
+                            </div>
+                            <!-- User Chat messages -->
+
+                            <!-- Submit Chat form -->
+                            <form class="chat-app-form" action="javascript:void(0);" onsubmit="submitChatForm();"
+                                enctype="multipart/form-data">
+                                <div class="input-group input-group-merge me-1 form-send-message">
+                                    <span class="speech-to-text input-group-text">
+                                        <i data-feather='mic'></i>
+                                    </span>
+                                    <input type="text" class="form-control message"
+                                        placeholder="Type your message or use speech to text">
+                                    <span class="input-group-text">
+                                        <label for="attach-doc" class="attachment-icon form-label mb-0">
+                                            <i data-feather='file-plus'></i>
+                                            <input type="file" id="attach-doc" name="files[]" hidden="" multiple>
+                                        </label></span>
+                                </div>
+                                <button type="button" class="btn btn-primary send waves-effect waves-float waves-light"
+                                    onclick="submitChatForm();">
+                                    <span class=" ">Send</span>
+                                </button>
+                            </form>
+                            <!--/ Submit Chat form -->
+                        </div>
+                        <!--/ Active Chat -->
+                    </section>
+                    <!--/ Main chat area -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+
+
+ 
+    var ticket_id = "{{required_ticket.id}}"
+    var is_ai_query_ticket = "{{is_ai_query_ticket}}"
+    function removeFile(chat_div_id) {
+        var div = $(`div[data-chat_div_id='${chat_div_id}']`);
+        div.remove()
+        $('.user-chats').scrollTop($('.user-chats > .chats').height() - 350);
+    }
+
+    function appendTextMessageToChatBox(message,bot_response=false,chat_direction_left=false) {   
+        if(bot_response==true) {
+            chat_direction_left = true
+        }
+
+        console.log("chat_direction_left = ",chat_direction_left)
+        var html = `
+            <div class="chat ${chat_direction_left ? "chat-left" : ""}">
+                <div class="chat-avatar">
+                    <span class="avatar box-shadow-1 cursor-pointer">
+                        <img src="https://w7.pngwing.com/pngs/754/2/png-transparent-samsung-galaxy-a8-a8-user-login-telephone-avatar-pawn-blue-angle-sphere-thumbnail.png" alt="avatar" height="36" width="36">
+                    </span>
+                </div>
+                <div class="chat-body">
+                    <div class="chat-content">
+                        <p>${message} </p>
+                    </div>
+                </div>
+            </div>`
+        $('.chats').append(html);
+        $('.message').val('');
+        $('.user-chats').scrollTop($('.user-chats > .chats').height() - 200);
+    }
+
+    function appendFileToChatBox(index, file, is_temp_file = true,chat_direction_left=false) {
+        var file_name = file.name;
+        var file_url = file.url; 
+        var href = file_url?`href='${file_url}'`:'' 
+        var currentURL = window.location.href;
+        var basePath = currentURL.split('/ticketChat')[0];
+        var download_href = file_url?`href='${basePath}/downloadTicketMessageFile?url=${file_url}'`:''
+ 
+
+        const randomUUID = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => (Math.random() * 16 | 0).toString(16));
+        var chat_div_id = randomUUID();
+
+        
+        var html = `
+
+        
+        <div class=" chat ${chat_direction_left ? 'chat-left' : ''} ${is_temp_file ? 'temp-file' : ''}" data-file_index='${index}' data-chat_div_id='${chat_div_id}' style="width: auto !important;">
+            <div class="chat-body">
+                <div class="chat-content d-flex align-items-center">
+                    <p class="mr-10px">${file_name}</p> 
+                    ${(is_temp_file) ?
+                `<div class="btn btn-outline-secondary p-5px temp_file_close_btn"  onclick="removeFile('${chat_div_id}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </div> 
+                    
+                        <div class="btn p-5px btn-info ml-3 temp_file_hidden_btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </div>
+                        <div class="w-5px"></div>
+                        <div class="btn  p-5px btn-primary temp_file_hidden_btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        </div>
+                    `
+                :
+                `
+                    <a ${file_url?href:''} class="btn p-5px btn-info ml-3 " ${file_url?"target='_blank'":''}>
+                        <i class="" data-feather="eye"></i>
+                    </a>
+                    <div class="w-5px"></div>
+
+                    <a  ${file_url?download_href:''}  ${file_url?"target='_blank'":''}  class="btn  p-5px btn-primary">
+                        <i class="" data-feather="download"></i>
+                    </a>
+                    `
+            } 
+                </div>
+            </div>
+        </div>
+        `
+        $('.chats').append(html);
+        $(".temp_file_hidden_btn").hide()
+        $('.user-chats').scrollTop($('.user-chats > .chats').height() - 200);
+    }
+
+
+
+    function loadTicketChat(ticket_id) {
+        $.ajax({
+            url: ` ?ticket_id=${ticket_id}`,
+            method: "GET",
+            success: function (res) {
+                var messages = res.messages;
+                console.log(messages)
+                for (var i = 0; i < messages.length; i++) {
+                    var message = messages[i];
+                    var is_file = message.is_file;
+                    console.log(message)
+                    if (!is_file) {
+                        appendTextMessageToChatBox(message.body,message.by_bot,!message.self)
+                    } else {
+                        var file = message.body
+                        appendFileToChatBox(i, file, false,!message.self)
+                    }
+                }
+            }
+        })
+    }
+
+    loadTicketChat(ticket_id)
+    $("#attach-doc").change(function (e) {
+        const files = e.target.files;
+        if (files.length != 0) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                console.log(file)
+                appendFileToChatBox(i, file);
+            }
+        }
+
+
+    })
+    // Function to get the file extension
+    function getFileExtension(filename) {
+        return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
+    }
+
+    // Function to format file siz e for readability
+    function formatFileSize(size) {
+        if (size === 0) return '0 Bytes';
+        const units = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        const i = parseInt(Math.floor(Math.log(size) / Math.log(1024)));
+        return Math.round(size / Math.pow(1024, i), 2) + ' ' + units[i];
+    }
+
+
+
+
+    // Function to upload Text message || Files to Server
+    function submitChatForm(source) {
+        var send_text_message = false
+        var send_files = false
+        var message = $('.message').val();
+        if (/\S/.test(message)) {
+            appendTextMessageToChatBox(message)
+            send_text_message = true
+
+        }
+        const files = document.getElementById('attach-doc').files;
+
+        // Get indexes of temp-uploaded files
+        var temp_files = $(".temp-file")
+        var temp_files_indexes = []
+        for (let index = 0; index < temp_files.length; index++) {
+            const element = temp_files[index];
+            temp_files_indexes.push($(element).attr("data-file_index"))
+        }
+        if (temp_files_indexes.length > 0) {
+            send_files = true
+        }
+
+        if (!send_files && !send_text_message) {
+            return alert("Please enter a text message or upload files!")
+        }
+
+        console.log("temp_uploaded_files ")
+        console.log(temp_files_indexes)
+
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            if (temp_files_indexes.includes(i.toString())) {
+                formData.append('files[]', files[i]);
+            }
+        }
+
+        $.ajax({
+            url: `{}?id=${ticket_id}&message=${message}&is_ai_query_ticket=${is_ai_query_ticket}`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+
+                // In case of AI Query Ticket, add response to ChatBox
+                var messages = res.messages;
+
+                console.log(messages)
+                if (messages && messages.length > 0) { 
+                    for (var i = 0; i < messages.length; i++) {
+                        var message = messages[i];
+                        var is_file = message.is_file;
+                        if (!is_file) {
+                            appendTextMessageToChatBox(message.body,message.by_bot,false)
+                        } else {
+                            var file = message.body
+                            appendFileToChatBox(i, file, false,false,)
+                        }
+                    }
+                }
+
+                // Hide Close icon of temp files 
+                $(".temp_file_close_btn").hide()
+                // Show View + Download icon 
+                $(".temp_file_hidden_btn").show()
+            }
+
+        })
+
+
+    }
+</script>

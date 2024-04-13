@@ -1,0 +1,101 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %}
+
+
+<section id="multiple-column-form">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title"> 
+                        {% if required_project.id %}
+                            Edit Project
+                        {% else %}
+                            Post New Project
+                        {% endif %} 
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form class="form" action="{%url 'editProject'%}?id={{required_project.id}}"  method="post" > {% csrf_token %}
+                        <div class="row"> 
+  
+                                <div class="col-md-12 col-12">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="name">Title</label>
+                                        <input type="text" id="title" class="form-control " placeholder="Title" name="title" required value="{{required_project.title}}" >
+                                    </div>
+                                </div>   
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="budget">Budget</label>
+                                        <input type="number" id="budget" class="form-control " placeholder="Budget" name="budget" required value="{{required_project.budget}}" >
+                                    </div>
+                                </div>  
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="upload_date">Start Date</label>
+                                    <input type="date" id="start_date" class="form-control filter_input_query" placeholder="Start Date" required required name="start_date">
+                                  </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="upload_date">End Date</label>
+                                    <input type="date" id="end_date" class="form-control filter_input_query" placeholder="End Date" required name="end_date">
+                                  </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="description">Description</label>
+                                        <textarea class="form-control" id="description" name="description"  required  rows="10" placeholder="Description">{{required_project.description}}</textarea>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="col-12">
+                                    <h4 class="card-title">Skills</h4> 
+                                    <div class="row">
+                                        {% for skill in available_skills %}
+                                        <div class="mb-1 col-12 col-md-3"> 
+                                            <div class="form-check form-check-inline">
+                                                {% if skill in required_project.skills.all %}
+                                                <input class="form-check-input" type="checkbox" id="{{skill.id}}"  name="skill_{{skill.id}}" checked>
+                                                    
+                                                {% else %}
+                                                <input class="form-check-input" type="checkbox" id="{{skill.id}}"  name="skill_{{skill.id}}">
+                                                    
+                                                {% endif %}
+                                                <label class="form-check-label" for="{{skill.id}}">{{skill.name}}</label>
+                                            </div> 
+                                        </div>  
+                                        {% endfor %}
+                                    </div>  
+                                </div>
+                                
+ 
+                            <div class="col-12"> 
+                                <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
+                                <button type="submit" class="btn btn-primary me-1 waves-effect waves-float waves-light">Post Project </button>
+                                <!-- <button type="submit" class="btn btn-primary me-1 waves-effect waves-float waves-light">Save and Return</button> -->
+                            </div> 
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+ 
+
+{% block 'jsblock' %}
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js" integrity="sha256-yE5LLp5HSQ/z+hJeCqkz9hdjNkk1jaiGG0tDCraumnA=" crossorigin="anonymous"></script>
+<script>  
+ 
+ 
+</script>
+{% endblock 'jsblock' %} 
+{% endblock 'mainlayout' %}

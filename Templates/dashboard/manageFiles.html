@@ -1,0 +1,198 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %}
+
+<section id="basic-datatable">
+
+
+
+
+	<div class="row">
+		<div class="col-12">
+			<div class="card" style="padding:0px 2%">
+				<div class="card-header border-bottom p-1">
+					<div class="head-label">
+						<h6 class="mb-0">Files Listing</h6>
+					</div>
+
+
+					
+					<div class="dt-action-buttons text-end"> 
+						<div class="dt-buttons d-inline-flex">
+							<a type="button" class="btn btn-info" id="clear_filter_btn">
+								Clear Filter
+							</a>
+						</div>
+						{% if request.user.is_superuser %} 
+							<button id="delete_files_btn" type="button" class="btn btn-danger waves-effect">
+								<i class="me-50" data-feather="trash"></i>
+								<span>Delete Files</span>
+							</button>
+
+
+
+							<button type="button" class="btn btn-success waves-effect" id="show_all_users_modal_btn" data-bs-toggle="modal" data-bs-target="#show_all_users_modal">
+								<i class="me-50" data-feather="share-2"></i>
+								Share
+							</button>
+
+							<a href="{%url 'uploadFiles'%}" type="button" class="btn btn-primary waves-effect">
+								<i class="me-50" data-feather="upload"></i>
+								<span>Upload Files</span>
+							</a>
+						{% else %}
+							
+						{% endif %}
+
+
+
+					</div>
+				</div>
+
+
+				<div class="row" id="basic-table">
+					<div class="col-12">
+						<div class="card">
+							<div class="table-responsive">
+								<div class="row m-0">
+									<div class="col-md-6 col-12">
+									  <div class="mb-1">
+										<label class="form-label" for="file_name">File Name</label>
+										<input type="text" id="file_name" class="form-control filter_input_query" placeholder="File Name" name="username">
+									  </div>
+									</div>
+									<!-- <div class="col-md-4 col-12">
+									  <div class="mb-1">
+										<label class="form-label" for="uuid">UUID</label>
+										<input type="text" id="uuid" class="form-control filter_input_query" placeholder="Reference Number" name="UUID">
+									  </div>
+									</div> -->
+									<div class="col-md-6 col-12">
+									  <div class="mb-1">
+										<label class="form-label" for="upload_date">Upload Date</label>
+										<input type="date" id="upload_date" class="form-control filter_input_query" placeholder="Upload Date" name="upload_date">
+									  </div>
+									</div>
+				  
+				  
+				  
+				   
+				  
+								  </div>
+								<table class="table mt-1">
+									<thead>
+										<tr>
+											<th style="padding-right:0px !important;width:30px !important">
+												<div class="form-check form-check-inline  ">
+													<input class="form-check-input  " type="checkbox"
+														id="files_table_checkbox_parent" value="unchecked">
+												</div>
+											</th>
+											<th>No.</th>
+											<th>File Name</th>
+											<!-- <th>UUID</th> -->
+											<th>Timestamp</th>
+											<th>Download</th>
+											{% if profile.role == USER_ROLE_SUPER_ADMIN_KEYWORD %}
+												<th>Users</th>
+											{% else %}
+												
+											{% endif %}
+										</tr>
+									</thead>
+									<tbody>
+
+										{% for file in available_files %}
+										<tr id="{{file.id}}" class="file_tr">
+											<td>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input files_table_checkbox_child" type="checkbox" id="{{file.id}}" value="unchecked">
+												</div>
+											</td>
+											<td> {{ forloop.counter }} </td>
+											<td> <a>{{file.orignal_file_name}} </a> </td>
+											<!-- <td>{{file.file_name}}</td> -->
+											<td>{{file.timestamp}}</td>
+											<td> <a href="{%url 'downloadFile'%}?id={{file.id}}" class="btn btn-primary waves-effect" target="_blank">Download </a> </td>
+											{% if request.user.is_superuser %}
+												<td> <a href="" class="btn btn-primary waves-effect show_recipient_users_modal_btn" data-file_id="{{file.id}}"  data-bs-toggle="modal" data-bs-target="#show_recipient_users_modal">Users</td>
+											{% else %}
+											{% endif %}
+
+										</tr>
+
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% include "partials/file_sharing_browse_all_users.html" %}
+{% include "partials/file_sharing_browse_recipient_users.html" %}
+
+<script>
+	populateTableCheckBoxes('files_table_checkbox_parent', 'files_table_checkbox_child')
+	var available_files = JSON.parse(`{{json_available_files |safe}}`);
+	var target_rows = $(".file_tr")
+
+  
+	$('.filter_input_query').on('keyup change', function (e) {
+		var file_name = $('#file_name').val().replace("  ", '').toLowerCase()
+		var uuid = $('#uuid').val().replace("  ", '').toLowerCase()
+		var upload_date = $('#upload_date').val().replace("  ", '').toLowerCase() 
+
+		for (var i = 0; i < target_rows.length; i++) {
+			var current_record_id = $(target_rows[i]).prop('id')
+			var current_record = available_files[i] 
+      
+			if (
+				current_record.orignal_file_name.toLowerCase().includes(file_name) &&
+				current_record.file_name.toLowerCase().includes(uuid) && 
+				current_record.timestamp.toLowerCase().includes(upload_date)   
+			) {
+				$(target_rows[i]).show()
+			} else {
+				$(target_rows[i]).hide()
+			}
+		}
+	})
+
+	$("#clear_filter_btn").click(function (e) {
+		$('#file_name').val('')
+		$('#uuid').val('')
+		$('#upload_date').val('') 
+		for (var i = 0; i < target_rows.length; i++) {
+			$(target_rows[i]).show()
+		}
+	})
+
+
+
+
+	$("#delete_files_btn").click(function () {
+		var ids = getSelectedChildIds('files_table_checkbox_child')
+		console.log(ids)
+		if (ids.length < 1) {
+			alert("Please select atleast one File")
+			return
+		}
+		var decision = confirm("Are you sure to delete selected Files ?")
+		if (!decision) {
+			e.preventDefault()
+			return
+		} 
+		$.ajax({
+			url: `{%url 'deleteFiles'%}?ids=${ids}`,
+			dataType: 'json',
+			success: function (res) {
+				window.location.reload()
+			}
+		})
+	})
+</script>
+{% endblock 'mainlayout' %}

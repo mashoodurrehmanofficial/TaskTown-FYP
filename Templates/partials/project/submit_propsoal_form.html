@@ -1,0 +1,28 @@
+<div class="card">
+    <div class="card-body">
+        <form action="{%url 'viewProject'%}?id={{required_project.id}}" method="post">
+            <div class="row">
+                
+                <div class="col-12">
+                    <div class="mb-1">
+                        <label class="form-label" for="proposal">Write your Proposal</label>
+                        <textarea class="form-control" id="proposal" name="proposal"  required  rows="10" placeholder="Proposal">{{required_bid.proposal}}</textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-12">
+                    <div class="mb-1">
+                        <label class="form-label" for="budget">Budget</label>
+                        <input type="number" id="budget" class="form-control " placeholder="Budget" name="budget" required value="{{required_bid.budget}}" >
+                    </div>
+                </div>  
+
+                <div class="col-12"> 
+                    <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
+                    <button type="submit" class="btn btn-primary me-1 waves-effect waves-float waves-light">Submit Proposal </button>
+                    <!-- <button type="submit" class="btn btn-primary me-1 waves-effect waves-float waves-light">Save and Return</button> -->
+                </div> 
+            </div>
+        </form>
+    </div>
+</div>
