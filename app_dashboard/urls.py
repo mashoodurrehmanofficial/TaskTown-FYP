@@ -16,6 +16,7 @@ urlpatterns = [
     path('', dashboard, name='dashboard'),     
     # Profile     
     path('account', manageAccount, name='manageAccount'),       
+    path('uploadProfilePicture', uploadProfilePicture, name='uploadProfilePicture'),       
     path('addNewExperience', addNewExperience, name='addNewExperience'),       
     path('deleteExperience', deleteExperience, name='deleteExperience'),    
     
@@ -24,7 +25,10 @@ urlpatterns = [
     path('editProject', editProject, name='editProject'),        
     path('addNewProject', editProject, name='addNewProject'),        
     path('viewProject', viewProjectDetails, name='viewProject'),        
+    path('awardProject', awardProject, name='awardProject'),        
     path('withdrawBid', withdrawBid, name='withdrawBid'),        
+    
+    
     path('viewProjectBids', viewProjectBids, name='viewProjectBids'),        
     path('deleteProject', deleteProject, name='deleteProject'),       
     path('searchProjects', searchProjects, name='searchProjects'),       

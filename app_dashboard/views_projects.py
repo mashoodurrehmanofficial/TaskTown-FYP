@@ -101,6 +101,7 @@ def viewProjectDetails(request):
     id = request.GET.get("id")
     required_project = ProjectsTable.objects.get(id=int(id))
     required_freelancer = ProfilesTable.objects.get(user=request.user)
+    required_profile = ProfilesTable.objects.get(user=request.user)
     required_bid = required_project.bids.filter(created_by=required_freelancer)
     
     if required_bid:
@@ -127,9 +128,12 @@ def viewProjectDetails(request):
         required_bid.save()
         context['required_bid'] = required_bid
         
+        return redirect(f'/dashboard/viewProjectBids?id={required_project.id}')
+        
         
      
     context['required_project'] = required_project
+    context['allow_bid_submittion'] = required_project.created_by != required_profile
     
     
     return render(request, 'dashboard/viewProjectDetails.html',context)  
@@ -141,14 +145,23 @@ def withdrawBid(request):
     project_id = request.GET.get("project_id")
     required_project = ProjectsTable.objects.get(id=int(project_id))
     required_freelancer = ProfilesTable.objects.get(user=request.user)
-    required_bid = required_project.bids.filter(created_by=required_freelancer)
+    required_bid = required_project.bids.filter(created_by=required_freelancer) 
+    required_bid.delete() 
     
+    return redirect(f'/dashboard/viewProjectBids?id={project_id}') 
+
+
+@csrf_exempt
+def awardProject(request): 
+    context = {"title":"Project Bids"}
+    project_id = request.GET.get("project_id")
+    freelancer_id = request.GET.get("freelancer_id")
+    required_project = ProjectsTable.objects.get(id=int(project_id))
+    required_freelancer = ProfilesTable.objects.get(id=int(freelancer_id))
     
-    required_bid.delete()
-    print("project_id = ",project_id)
-    
-    # context['required_project'] = required_project
-    
+    required_project.freelancer = required_freelancer
+    required_project.status = PROJECT_STATUS_ACTIVE
+    required_project.save()
     return redirect(f'/dashboard/viewProjectBids?id={project_id}') 
 
 
@@ -164,6 +177,9 @@ def viewProjectBids(request):
     required_freelancer = ProfilesTable.objects.get(user=request.user)
     context["bid_submitted"] = required_project.bids.filter(created_by=required_freelancer).exists()
     
+    required_profile = ProfilesTable.objects.get(user=request.user)
+    
+    context['allow_award'] = required_project.created_by.id ==  required_profile.id
     
     print(context)
     

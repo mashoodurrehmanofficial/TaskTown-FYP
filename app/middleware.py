@@ -20,7 +20,7 @@ def context_processor(request):
     context = {}
     path = request.path 
     sidebar_menu = [
-        {"path": ["/dashboard","/dashboard/"], "text":"Dashboard", "icon": "home", } ,
+        {"path": ["/dashboard/"], "text":"Dashboard", "icon": "home", } ,
         {"path": ["/dashboard/searchProjects"], "text":"Search", "icon": "search", } ,
         {"path": ["/dashboard/projects"], "text":"Projects", "icon": "layers", } ,
         {"path": ["/dashboard/Chat"], "text":"Chat", "icon": "message-circle", } ,
@@ -58,6 +58,7 @@ def context_processor(request):
         
          
     context['USER_ROLE_FREELANCER_KEYWORD'] = USER_ROLE_FREELANCER_KEYWORD
+    context['PROJECT_STATUS_OPEN'] = PROJECT_STATUS_OPEN
     context['USER_ROLE_CLIENT_KEYWORD'] = USER_ROLE_CLIENT_KEYWORD 
 
 

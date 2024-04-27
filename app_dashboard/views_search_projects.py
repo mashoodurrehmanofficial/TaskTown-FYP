@@ -23,10 +23,10 @@ def searchProjects(request):
     
     # context = {**context, **dict(request.GET)}
     
-    query_title = request.GET.get('query_title')
+    query_title = request.GET.get('query_title','')
     query_min_budget = request.GET.get('query_min_budget')
     query_max_budget = request.GET.get('query_max_budget')
-    query_skills = request.GET.getlist('query_skills')
+    query_skills = request.GET.getlist('query_skills',[])
     
     
     
@@ -39,18 +39,19 @@ def searchProjects(request):
     context['query_min_budget'] = query_min_budget
     context['query_max_budget'] = query_max_budget
     context['query_skills'] = query_skills
-    
-    print(query_skills)
+    context['required_profile'] = required_profile
      
     available_projects = ProjectsTable.objects.filter(
-        title__contains=query_title, created_by=required_profile,status=PROJECT_STATUS_OPEN, budget__gte=min_budget, budget__lte=max_budget, 
+        title__contains=query_title, status=PROJECT_STATUS_OPEN, budget__gte=min_budget, budget__lte=max_budget, 
+        # created_by=required_profile,
+        # 
     ) 
     
     if query_skills: 
         available_projects = available_projects.filter(skills__name__in=query_skills)
         
         
-       
+    print(available_projects)
        
     required_freelancer = ProfilesTable.objects.get(user=request.user)
     json_available_projects = []

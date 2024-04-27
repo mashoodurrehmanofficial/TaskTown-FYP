@@ -30,7 +30,11 @@
 			</div>
 		</div>
 	</div>
+
+	{% if allow_bid_submittion and required_project.status ==  PROJECT_STATUS_OPEN %}
+		
 	{% include 'partials/project/submit_propsoal_form.html'   %}
+	{% endif %}
 	
 </section>
 

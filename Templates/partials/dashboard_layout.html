@@ -134,19 +134,16 @@
                             <div class="user-nav d-sm-flex d-none"><span class="user-name fw-bolder">{%trans 'Hello'%} </span><span
                                     class="user-status">
 
-                                    {% if is_employee %}
-                                    {{required_employee.name}}
-                                        
-                                    {% else %}
-                                    {{request.user.username}}
-                                        
-                                    {% endif %}
+                                    {{profile.username}}
                                 
-                                </span></div><span class="avatar"><img
+                                </span></div>
+                                <span class="avatar"><img
                                     class="round"
-                                    src="https://w7.pngwing.com/pngs/754/2/png-transparent-samsung-galaxy-a8-a8-user-login-telephone-avatar-pawn-blue-angle-sphere-thumbnail.png"
-                                    alt="avatar" height="40" width="40"><span
-                                    class="avatar-status-online"></span></span>
+                                    src="{{profile.image_path}}"
+                                    alt="avatar" height="40" width="40">
+                                    <span class="avatar-status-online"></span>
+                                
+                                </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
 

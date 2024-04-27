@@ -59,9 +59,10 @@ class ProfilesTable(models.Model):
     username =  models.CharField(max_length=1000,default='', )
     password =  models.CharField(max_length=1000,default='', )
     stripe_customer_id =  models.CharField(max_length=1000,default='', )
+    image_path =  models.CharField(max_length=1000,default='', )
     
     def __str__(self) -> str:
-        return f'{self.user}'
+        return f'{self.username}'
     
 
 

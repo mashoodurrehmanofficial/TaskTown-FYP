@@ -81,7 +81,8 @@ def successPayment(request):
     )
     amount = payment_intents['data'][0]['amount']
     
-    required_profile.balance = required_profile.balance + amount
+    print("amount = ",amount)
+    required_profile.balance = required_profile.balance + amount/100
     required_profile.save()
     # print(payment_intents)
     return redirect("manageAccount")

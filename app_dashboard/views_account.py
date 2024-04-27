@@ -20,6 +20,7 @@ def manageAccount(request):
     context = {"title":"Edit Account"} 
     user:User = request.user
     required_profile = ProfilesTable.objects.get(user=user)
+     
     
     if request.method == "POST":
         data = request.POST
@@ -75,6 +76,36 @@ def addNewExperience(request):
     
     return redirect("manageAccount")
 
+@csrf_exempt
+def uploadProfilePicture(request):
+    folder_path = settings.MEDIA_ROOT 
+    user = request.user
+    required_profile = ProfilesTable.objects.get(user=user)
+    if request.method == "POST":
+        
+        if required_profile.image_path:
+            image_path = os.path.join(folder_path, required_profile.image_path)    
+            if os.path.exists(image_path):
+                try:
+                    os.remove(image_path)
+                except:
+                    pass
+        
+        
+        image = request.FILES['image']
+        file_name =  str(uuid.uuid4())+".png"
+        file_path = os.path.join(folder_path  , file_name)
+        
+        required_profile.image_path = f"/Media/{file_name}"
+        required_profile.save()
+        
+        with open(file_path, 'wb') as f:
+            for chunk in image.chunks():
+                f.write(chunk)
+
+    
+    return redirect("manageAccount")
+        
 @csrf_exempt
 def deleteExperience(request):
     id = request.GET.get("id")
