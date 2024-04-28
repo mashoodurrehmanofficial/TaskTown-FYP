@@ -16,7 +16,7 @@
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form class="form" action="{%url 'editProject'%}?id={{required_project.id}}"  method="post" > {% csrf_token %}
+                    <form id="create_new_project_form" class="form" action="{%url 'editProject'%}?id={{required_project.id}}"  method="post" > {% csrf_token %}
                         <div class="row"> 
   
                                 <div class="col-md-12 col-12">
@@ -29,7 +29,7 @@
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label class="form-label" for="budget">Budget</label>
-                                        <input type="number" id="budget" class="form-control " placeholder="Budget" name="budget" required value="{{required_project.budget}}" >
+                                        <input type="number" id="budget" class="form-control " placeholder="Budget" name="budget" required value="{{required_project.budget}}" min="1" >
                                     </div>
                                 </div>  
 
@@ -42,7 +42,7 @@
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label class="form-label" for="upload_date">End Date</label>
-                                    <input type="date" id="end_date" class="form-control filter_input_query" placeholder="End Date" required name="end_date">
+                                    <input type="date" id="end_date" class="form-control filter_input_query" placeholder="End Date" required name="end_date" >
                                   </div>
                                 </div>
 
@@ -94,8 +94,15 @@
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js" integrity="sha256-yE5LLp5HSQ/z+hJeCqkz9hdjNkk1jaiGG0tDCraumnA=" crossorigin="anonymous"></script>
 <script>  
- 
- 
+    var required_profile_balance = parseInt("{{required_profile_balance}}")
+    $("#create_new_project_form").submit(function(e) {
+        var budget = parseInt($("#budget").val())
+        if (budget > required_profile_balance) {
+            e.preventDefault()
+            return alert(`Please add balance of ${budget-required_profile_balance} to post this project `)
+        }
+    })
+
 </script>
 {% endblock 'jsblock' %} 
 {% endblock 'mainlayout' %}

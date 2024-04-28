@@ -37,11 +37,14 @@
                             Share
                         </button> -->
 
-                        <a href="{%url 'addNewProject'%}" type="button" class="btn btn-primary waves-effect">
-                            <i class="me-50" data-feather="plus"></i>
-                            <span>Post New Porject</span>
-                        </a>
-                
+						{% if profile.type ==  USER_ROLE_CLIENT_KEYWORD %}
+							<a href="{%url 'addNewProject'%}" type="button" class="btn btn-primary waves-effect">
+								<i class="me-50" data-feather="plus"></i>
+								<span>Post New Porject</span>
+							</a>
+					
+							
+						{% endif %}
 
 
 

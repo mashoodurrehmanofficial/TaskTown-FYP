@@ -42,6 +42,7 @@ def manageProjects(request):
     context['available_projects'] = available_projects
     context['json_available_projects'] = json.dumps(json_available_projects)
     context['available_project_statuses'] = AVAILABLE_PROJECT_STATUSES
+    context['required_profile'] = required_profile
     
     return render(request, 'dashboard/manageProjects.html',context) 
 
@@ -91,6 +92,7 @@ def editProject(request):
         return redirect("manageProjects")
     
     context['required_project'] = required_project
+    context['required_profile_balance'] = required_profile.balance
     return render(request, 'dashboard/editProject.html',context) 
     
 

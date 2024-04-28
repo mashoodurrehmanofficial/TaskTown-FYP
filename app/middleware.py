@@ -25,7 +25,7 @@ def context_processor(request):
         {"path": ["/dashboard/projects"], "text":"Projects", "icon": "layers", } ,
         {"path": ["/dashboard/Chat"], "text":"Chat", "icon": "message-circle", } ,
         {"path": ["/dashboard/account"], "text":"Account", "icon": "user", } ,
-        {"path": ["/dashboard/logout"], "text":"Logout", "icon": "log-out", } ,
+        {"path": ["/logout"], "text":"Logout", "icon": "log-out", } ,
         # {"path": ["/dashboard/aiQueries"], "text":"AI Queries", "icon": "twitch","role":role_categories} ,
         # # {"path": ["/dashboard/manageAccess"],"text":"Manage Access", "icon": "settings"} ,
         # {"path": ["/dashboard/manageTickets",'/dashboard/manageTickets/ticketChat','/dashboard/manageTickets/addNewTicket'],"text":"Tickets", "icon": "mail","role":role_categories} ,

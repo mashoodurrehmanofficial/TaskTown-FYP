@@ -102,3 +102,15 @@ class DisputesTable(models.Model):
     messages = models.ManyToManyField(MessagesTable,blank=True)
     
     
+     
+class ContactUsTable(models.Model): 
+    first_name  = models.CharField(max_length=10000, default='',blank=True,null=True)
+    last_name   = models.CharField(max_length=10000, default='',blank=True,null=True)
+    city        = models.CharField(max_length=10000, default='',blank=True,null=True)
+    country     = models.CharField(max_length=10000, default='',blank=True,null=True)
+    company     = models.CharField(max_length=10000, default='',blank=True,null=True)
+    email       = models.CharField(max_length=10000, default='',blank=True,null=True)
+    description = models.CharField(max_length=10000, default='',blank=True,null=True)
+
+    def __str__(self) -> str:
+        return f'{self.first_name}'      

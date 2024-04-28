@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-import datetime,stripe
+import datetime,stripe,traceback
 from datetime import timedelta,datetime
 from .models import *
 from collections import defaultdict
@@ -43,15 +43,15 @@ def contact(request):
         company = data['company']
         email = data['email']
         description = data['description']
-        # ContactUsTable(
-        #     first_name  = first_name,
-        #     last_name   = last_name,
-        #     city        = city,
-        #     country     = country,
-        #     company     = company,
-        #     email       = email,
-        #     description = description,
-        # ).save()
+        ContactUsTable(
+            first_name  = first_name,
+            last_name   = last_name,
+            city        = city,
+            country     = country,
+            company     = company,
+            email       = email,
+            description = description,
+        ).save()
         
         body = ''
         body += "{:<15} {:<50} <br>".format("First Name:", first_name)
@@ -62,13 +62,13 @@ def contact(request):
         body += "{:<15} {:<50} <br>".format("Email:", email)
         body += "{:<15} {:<50} <br>".format("Description:", description)
    
-        # try:
+        try:
         #     html_content= body
         #     send_email(subject="New Contact Request",receiver=email,heading="New Contact Request", html_content=html_content)
-        #     context['success'] = "Your Request has been submitted successfully. We will contact you soon."
-        # except:
-        #     print(traceback.format_exc())
-        #     context['error'] = "Cannot send email."
+            context['success'] = "Your Request has been submitted successfully. We will contact you soon."
+        except:
+            print(traceback.format_exc())
+            context['error'] = "Cannot send email."
         
         
     return render(request, 'app/contact.html' ,context) 

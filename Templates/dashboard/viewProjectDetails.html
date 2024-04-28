@@ -9,16 +9,12 @@
 			<h4 class="card-title">Basic Tab</h4>
 		</div> -->
 		<div class="card-body">
-			{% include 'partials/project/navigation_bar.html'   %}
-			
-			<div class="tab-content"> 
-				
+			{% include 'partials/project/navigation_bar.html'   %} 
+			<div class="tab-content">  
 				<div>
 					<span>
 						<b style="font-size: 20px;">{{required_project.title}}</b> ({{required_project.start_date}} - {{required_project.end_date}})
-					</span>
-					
-					
+					</span> 
 					<hr>
 					Budget: <b>${{required_project.budget}}</b>
 					<hr>
