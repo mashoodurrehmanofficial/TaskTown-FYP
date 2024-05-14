@@ -1,0 +1,22 @@
+<div class="card">
+    <div class="card-body">
+        <form action="{%url 'postReview'%}?id={{required_project.id}}" method="post">
+            <div class="row">
+                
+                <div class="col-12">
+                    <div class="mb-1">
+                        <label class="form-label" for="review">Write your review</label>
+                        <textarea class="form-control" id="review" name="review"  required  rows="10" placeholder="Review"></textarea>
+                    </div>
+                </div>
+
+               
+                <div class="col-12"> 
+                    <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
+                    <button type="submit" class="btn btn-primary me-1 waves-effect waves-float waves-light">Submit Review </button>
+                    <!-- <button type="submit" class="btn btn-primary me-1 waves-effect waves-float waves-light">Save and Return</button> -->
+                </div> 
+            </div>
+        </form>
+    </div>
+</div>

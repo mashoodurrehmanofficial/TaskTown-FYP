@@ -193,6 +193,49 @@ def viewProjectBids(request):
         
 
 @csrf_exempt
+def markProjectCompleted(request):
+    id = request.GET.get("id")
+    project = ProjectsTable.objects.get(id=int(id))
+    project.status = PROJECT_STATUS_COMPLETED
+    project.save()
+    
+    freelancer = project.freelancer
+    freelancer.balance += project.budget
+    
+    freelancer.save()
+    
+    return redirect(f"/dashboard/viewProject?id={project.id}")
+        
+
+
+        
+
+@csrf_exempt
+def postReview(request):
+    context = {"title":'Project Reviews'}
+    id = request.GET.get("id")
+    required_project = ProjectsTable.objects.get(id=int(id))
+    required_profile = ProfilesTable.objects.get(user=request.user)
+    
+    
+    if request.method == "POST":
+        review = request.POST['review']
+        if required_profile.type == USER_ROLE_FREELANCER_KEYWORD:
+            required_project.freelancer_review = review
+        else:
+            required_project.client_review = review
+            
+        required_project.save()
+            
+     
+    context['required_project'] = required_project
+    context['required_profile'] = required_profile
+    
+    
+    return render(request, 'dashboard/postReview.html',context)
+        
+
+@csrf_exempt
 def deleteProject(request):
     id = request.GET.get("id")
     project = ProjectsTable.objects.get(id=int(id))

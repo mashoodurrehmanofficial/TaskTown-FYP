@@ -141,7 +141,13 @@
 											<td> 
                                                 
                                                 <a href="{%url 'viewProject'%}?id={{project.id}}" class="btn btn-primary "  >View Details</i> </a> 
-                                                <a href="{%url 'deleteProject'%}?id={{project.id}}" class="btn btn-danger delete_project_btn"  onclick=""><i class="me-50 " data-feather="trash"></i> </a> 
+                                                {% if required_project.status != PROJECT_STATUS_OPEN %}
+													
+												<a href="{%url 'viewProjectChat'%}?id={{project.id}}" class="btn btn-info"  onclick=""><i class="me-50 " data-feather="message-square"></i> </a> 
+												{% endif %}
+												
+                                                
+												<a href="{%url 'deleteProject'%}?id={{project.id}}" class="btn btn-danger delete_project_btn"  onclick=""><i class="me-50 " data-feather="trash"></i> </a> 
                                             </td>
 										 
 

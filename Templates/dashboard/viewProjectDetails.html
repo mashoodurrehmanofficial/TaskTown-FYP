@@ -32,6 +32,28 @@
 	{% include 'partials/project/submit_propsoal_form.html'   %}
 	{% endif %}
 	
+
+	
+	{% if required_project.created_by.id == profile.id %}
+		
+		
+	<div>
+		<div class="d-flex align-items-spacebetween" style="justify-content: space-between;">
+			{% if required_project.status == PROJECT_STATUS_ACTIVE %}
+			<a class="btn btn-info" href="{%url 'markProjectCompleted'%}?id={{required_project.id}}">Mark Project Completed</a>
+			{% endif %}
+			
+			{% if required_project.status == PROJECT_STATUS_ACTIVE %}
+			<a class="btn btn-danger">Raise Dispute</a>
+			{% endif %}
+		</div>
+	</div>
+	<br>
+	
+	{% else %}
+	{% endif %}
+
+
 </section>
 
  

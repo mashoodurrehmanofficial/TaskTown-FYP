@@ -1,0 +1,196 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %}
+
+
+<style>
+    .chat-app-window .active-chat .chat-header {
+        height: 0px !important;
+    }
+
+    .chat-app-window .user-chats {
+        height: calc(100% - 100px) !important;
+    }
+
+    .mr-10px {
+        margin-right: 10px !important
+    }
+
+    .w-5px {
+        width: 5px !important
+    }
+
+    .p-5px {
+        padding: 5px !important
+    }
+
+     
+</style>
+
+
+
+<section id="basic-datatable">
+
+
+	<div class="card">
+		<!-- <div class="card-header">
+			<h4 class="card-title">Basic Tab</h4>
+		</div> -->
+		<div class="card-body">
+			{% include 'partials/project/navigation_bar.html'   %}
+
+			<div class="tab-content"> 
+
+			
+<div class="app-content content chat-application m-0 p-0">
+    <div class="content-area-wrapper ">
+        <div class="content-right" style="width: 100%;">
+            <div class="content-wrapper container-xxl p-0">
+                <div class="content-header row">
+                </div>
+                <div class="content-body">
+                    <div class="body-content-overlay"></div>
+                    <!-- Main chat area -->
+                    <section class="chat-app-window">
+                        <!-- To load Conversation -->
+                        <div class="start-chat-area d-none">
+                            <div class="mb-1 start-chat-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-message-square">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </div>
+                            <h4 class="sidebar-toggle start-chat-text">Start Conversation</h4>
+                        </div>
+                        <!--/ To load Conversation -->
+
+                        <!-- Active Chat -->
+                        <div class="active-chat">
+                            <!-- Chat Header -->
+                            <div class="chat-navbar">
+                                <header class="chat-header">
+                                </header>
+                            </div>
+                            <!--/ Chat Header -->
+
+                            <!-- User Chat messages -->
+                            <div class="user-chats ps ps--active-y">
+                                <div class="chats" id="chat-log">
+
+
+                                </div>
+                                <div class="ps__rail-x" style="left: 0px; bottom: -676px;">
+                                    <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                                </div>
+                                <div class="ps__rail-y" style="top: 676px; right: 0px; height: 140px;">
+                                    <div class="ps__thumb-y" tabindex="0" style="top: 116px; height: 24px;"></div>
+                                </div>
+                            </div>
+                            <!-- User Chat messages -->
+
+                            <!-- Submit Chat form -->
+                            <form class="chat-app-form" action="javascript:void(0);"
+                                enctype="multipart/form-data">
+                                <div class="input-group input-group-merge me-1 form-send-message">
+                                    <span class="speech-to-text input-group-text">
+                                        <i data-feather='mic'></i>
+                                    </span>
+                                    <input type="text" class="form-control message" id="chat-message-input"
+                                        placeholder="Type your message">
+                                    <span class="input-group-text">
+                                        <!-- <label for="attach-doc" class="attachment-icon form-label mb-0">
+                                            <i data-feather='file-plus'></i>
+                                            <input type="file" id="attach-doc" name="files[]" hidden="" multiple>
+                                        </label> -->
+                                    </span>
+                                </div>
+                                <button type="button" class="btn btn-primary send waves-effect waves-float waves-light"
+                                    id="chat-message-submit">
+                                    <!-- <span class=" ">Send</span> -->
+
+                                    <i data-feather='send'></i>
+
+                                </button>
+                            </form>
+                            <!--/ Submit Chat form -->
+                        </div>
+                        <!--/ Active Chat -->
+                    </section>
+                    <!--/ Main chat area -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+			</div>
+		</div>
+	</div>
+ 
+</section>
+
+ 
+<script>
+    const projectId = getProjectIdFromURL(); // Function to extract project ID from URL
+    var required_user_id = "{{required_user_id}}"
+    var employer_profile = JSON.parse(`{{employer_profile | safe}}`)
+    var freelancr_profile = JSON.parse(`{{freelancr_profile | safe}}`)
+    console.log("image_path = ", freelancr_profile)
+
+    const chatSocket = new WebSocket(`ws://localhost:8000/ws/chat/${projectId}/`);
+
+    chatSocket.onmessage = function(e) {
+
+        const data = JSON.parse(e.data);
+
+            console.log("required_user id = ",required_user_id)
+        var chat_direction_left =  parseInt(data.message.user_id) != parseInt(required_user_id)
+        var sender_profile = parseInt(data.message.user_id) == parseInt(freelancr_profile.user) ?  freelancr_profile :  employer_profile
+
+
+        // var chatLog = $('#chat-log').value += (data.message + '\n');
+        var chatLog = $('#chat-log')
+        console.log(data);
+        chatLog.append(
+            `<div class=" chat ${chat_direction_left ? 'chat-left' : ''} ">
+        <div class="chat-avatar">
+            <span class="avatar box-shadow-1 cursor-pointer">
+                <a href="{%url 'viewPublicProfile'%}?id=${sender_profile.id}">
+                <img src="${sender_profile.image_path}" alt="avatar" height="36" width="36">
+                </a>
+            </span>
+        </div>
+        <div class="chat-body">
+            <div class="chat-content">
+                <p>${data.message.text}</p>
+            </div>
+        </div>
+    </div>`
+        )
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+        messageInputDom.value = '';
+    };
+
+    function getProjectIdFromURL() {
+        // Parse project ID from current URL
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('id');
+    }
+</script>
+{% endblock 'mainlayout' %}

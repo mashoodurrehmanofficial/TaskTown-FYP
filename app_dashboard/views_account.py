@@ -116,3 +116,24 @@ def deleteExperience(request):
     return redirect("manageAccount")
         
         
+        
+@csrf_exempt
+def viewPublicProfile(request):
+    context = {'title': 'Public Profile'}
+    id = request.GET.get("id")
+    required_profile = ProfilesTable.objects.get(id=int(id))
+     
+    context['required_profile'] = required_profile
+    
+    if required_profile.type == USER_ROLE_FREELANCER_KEYWORD:
+        completed_projects = ProjectsTable.objects.filter(status=PROJECT_STATUS_COMPLETED,freelancer=required_profile)
+    else:
+        completed_projects = ProjectsTable.objects.filter(status=PROJECT_STATUS_COMPLETED,created_by=required_profile)
+    
+    
+    context['completed_projects'] = completed_projects
+    
+    return render(request, "dashboard/viewPublicProfile.html",context)
+        
+        
+        

@@ -1,0 +1,44 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %}
+
+<section id="basic-datatable">
+
+
+    <div class="card">
+        <!-- <div class="card-header">
+			<h4 class="card-title">Basic Tab</h4>
+		</div> -->
+        <div class="card-body">
+            {% include 'partials/project/navigation_bar.html' %}
+            <div class="tab-content">
+                {% if required_profile.type == USER_ROLE_FREELANCER_KEYWORD and not required_project.freelancer_review%}
+                    {% include 'partials/project/post_review_form.html'   %}
+                {% endif %}
+
+                {% if  required_profile.type == USER_ROLE_FREELANCER_KEYWORD and  required_project.freelancer_review %}
+                    You have already submitted Review
+                {% endif %}
+
+
+
+                {% if required_profile.type == USER_ROLE_CLIENT_KEYWORD and not required_project.client_review%}
+                    {% include 'partials/project/post_review_form.html'   %}
+                {% endif %}
+
+                {% if  required_profile.type == USER_ROLE_CLIENT_KEYWORD and  required_project.client_review %}
+                    You have already submitted Review
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+ 
+
+
+</section>
+
+
+<script>
+
+</script>
+{% endblock 'mainlayout' %}

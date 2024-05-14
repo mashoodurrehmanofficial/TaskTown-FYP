@@ -23,19 +23,10 @@ def context_processor(request):
         {"path": ["/dashboard/"], "text":"Dashboard", "icon": "home", } ,
         {"path": ["/dashboard/searchProjects"], "text":"Search", "icon": "search", } ,
         {"path": ["/dashboard/projects"], "text":"Projects", "icon": "layers", } ,
-        {"path": ["/dashboard/Chat"], "text":"Chat", "icon": "message-circle", } ,
+        # {"path": ["/dashboard/Chat"], "text":"Chat", "icon": "message-circle", } ,
         {"path": ["/dashboard/account"], "text":"Account", "icon": "user", } ,
         {"path": ["/logout"], "text":"Logout", "icon": "log-out", } ,
-        # {"path": ["/dashboard/aiQueries"], "text":"AI Queries", "icon": "twitch","role":role_categories} ,
-        # # {"path": ["/dashboard/manageAccess"],"text":"Manage Access", "icon": "settings"} ,
-        # {"path": ["/dashboard/manageTickets",'/dashboard/manageTickets/ticketChat','/dashboard/manageTickets/addNewTicket'],"text":"Tickets", "icon": "mail","role":role_categories} ,
-        # {"path": ["/dashboard/manageFiles","/dashboard/manageFiles/uploadFiles",], "text":"Files", "icon": "file","role":role_categories} ,
-        # {"path": ["/dashboard/manageVideos","/dashboard/manageVideos/addNewVideo","/dashboard/manageVideos/editVideo"], "text":"Videos", "icon": "video","role":[USER_ROLE_ADMIN_KEYWORD,USER_ROLE_SUPER_ADMIN_KEYWORD]} ,
-        # {"path": ["/dashboard/membership",], "text":"Membership", "icon": "user-plus","role":role_categories} ,
-        # {"path": ["/dashboard/manageUsers",'/dashboard/manageUsers/editUser'], "text":"Users", "icon": "users","role":[USER_ROLE_ADMIN_KEYWORD,USER_ROLE_SUPER_ADMIN_KEYWORD]} ,
-        # {"path": ["/dashboard/serviceAnalytics"], "text":"Service Analytics", "icon": "credit-card","role":[USER_ROLE_SUPER_ADMIN_KEYWORD]} ,
-        # {"path": ['/admin/app_headlines/headlinestable/'], "text":"Headlines", "icon": "file-text","role":[USER_ROLE_ADMIN_KEYWORD,USER_ROLE_SUPER_ADMIN_KEYWORD]} ,
-    ] 
+ ] 
 
         
          
@@ -59,6 +50,7 @@ def context_processor(request):
          
     context['USER_ROLE_FREELANCER_KEYWORD'] = USER_ROLE_FREELANCER_KEYWORD
     context['PROJECT_STATUS_OPEN'] = PROJECT_STATUS_OPEN
+    context['PROJECT_STATUS_ACTIVE'] = PROJECT_STATUS_ACTIVE
     context['USER_ROLE_CLIENT_KEYWORD'] = USER_ROLE_CLIENT_KEYWORD 
 
 

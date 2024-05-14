@@ -1,3 +1,5 @@
+
+
 <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item">
         {% if title == "Project Details" %}
@@ -24,11 +26,27 @@
     <li class="nav-item">
         
         {% if  title == "Project Reviews" %}
-        <a class="nav-link active"   href="{%url 'viewProject'%}?id={{required_project.id}}" aria-controls="reviews" role="tab" aria-selected="false">Reviews</a>
+        <a class="nav-link active"   href="{%url 'postReview'%}?id={{required_project.id}}" aria-controls="reviews" role="tab" aria-selected="false">Reviews</a>
             
         {% else %}
-        <a class="nav-link"   href="{%url 'viewProject'%}?id={{required_project.id}}" aria-controls="reviews" role="tab" aria-selected="false">Reviews</a>
+        <a class="nav-link"   href="{%url 'postReview'%}?id={{required_project.id}}" aria-controls="reviews" role="tab" aria-selected="false">Reviews</a>
             
         {% endif %}
     </li>
+
+
+    {% if required_project.status != PROJECT_STATUS_OPEN %}
+        
+    <li class="nav-item">
+        {% if  title == "Project Chat" %}
+        <a class="nav-link active"   href="{%url 'viewProjectChat'%}?id={{required_project.id}}" aria-controls="reviews" role="tab" aria-selected="false">Chat</a>
+        {% else %}
+        <a class="nav-link"   href="{%url 'viewProjectChat'%}?id={{required_project.id}}" aria-controls="reviews" role="tab" aria-selected="false">Chat</a>
+            
+        {% endif %}
+    </li>
+
+
+    {% endif %}
+
 </ul>

@@ -37,7 +37,9 @@
                             <div class="employee-task d-flex justify-content-between align-items-center">
                                 <div class="d-flex flex-row">
                                     <div class="avatar me-75">
-                                        <img src="{{bid.created_by.image_path}}" class="round" width="60" height="60" alt="Avatar">
+                                        <a href="{%url 'viewPublicProfile'%}?id={{bid.created_by.id}}">
+                                            <img src="{{bid.created_by.image_path}}" class="round" width="60" height="60" alt="Avatar">
+                                        </a>
  
 
 

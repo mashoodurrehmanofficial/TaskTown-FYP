@@ -1,0 +1,114 @@
+{% extends 'partials/dashboard_layout.html' %}
+{% block 'mainlayout' %}
+
+
+<div>
+    <div class="">
+        <div class="card">
+            <div class="card-header">
+                <!-- <div>
+                    <h4 class="card-title">Manage Profile</h4>
+                    <span class="card-subtitle text-muted">Commercial networks and enterprises</span>
+                </div> -->
+            </div>
+
+
+
+            <div class="card-body">
+
+
+                <div class="d-flex flex-row">
+                    <div class="avatar me-75">
+                        <a href="{%url 'viewPublicProfile'%}?id={{required_profile.id}}">
+                            <img src="{{required_profile.image_path}}" class="round" width="60" height="60"
+                                alt="Avatar">
+                        </a>
+                    </div>
+
+                    <div class="my-auto">
+                        <h3 class="mb-0">{{required_profile.username}}</h3>
+                    </div>
+                </div>
+
+                
+                <div class="dropdown-divider"></div>
+
+
+                <div class="dropdown-divider"></div>
+                <h4 class="card-title">Skills</h4>
+                <div class="row">
+                    {% for skill in profile.skills.all %}
+                    <div class="mb-1 col-12 col-md-3">
+                        <label class="badge bg-primary" for="{{skill.id}}">{{skill.name}}  </label>
+
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="dropdown-divider"></div>
+                <h4 class="card-title">Experience</h4>
+                <div class="row">
+                    {% for experience in profile.experience.all %}
+                    <div class="mb-1 col-12 col-md-12">
+                        <h2>{{experience.title}}</h2>
+                        <span>{{experience.start_date}} - {{experience.end_date}}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="dropdown-divider"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="">
+    <div class="card">
+        <div class="card-header">
+        </div>
+
+
+
+        <div class="card-body">
+            <div class="row">
+                <h3><b>Reviews</b></h3>
+
+                {% for project in completed_projects %}
+                <div class=" ">
+                    <h2>{{project.title}}  ({{project.budget}})</h2>
+
+                    {% if profile.type == USER_ROLE_FREELANCER_KEYWORD %}
+                    <span>{{project.client_review}}</span>
+                    
+                    
+                    {% else %}
+                    <span>{{project.freelancer_review}}</span>
+                        
+                    {% endif %}
+                </div>
+                <div class="dropdown-divider"></div>
+                {% endfor %}
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div>
+
+</div>
+
+{% if profile.type == USER_ROLE_FREELANCER_KEYWORD %}
+
+{% else %}
+
+{% endif %}
+
+
+
+
+{% endblock 'mainlayout' %}

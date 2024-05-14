@@ -94,12 +94,13 @@ class ProjectsTable(models.Model):
     created_by = models.ForeignKey(ProfilesTable,on_delete=models.CASCADE,blank=True,null=True,related_name="created_by")
     bids = models.ManyToManyField(BidsTable,blank=True,related_name="bids")
     skills = models.ManyToManyField(SkillsTable,blank=True,related_name='required_skills')
+    messages = models.ManyToManyField(MessagesTable,blank=True)
     
     
 class DisputesTable(models.Model):
     __AVAILABLE_DISPUTE_STATUSES = ( (status,status) for status in AVAILABLE_DISPUTE_STATUSES )
     status =  models.CharField(max_length=1000,default='',choices=__AVAILABLE_DISPUTE_STATUSES)
-    messages = models.ManyToManyField(MessagesTable,blank=True)
+    # messages = models.ManyToManyField(MessagesTable,blank=True)
     
     
      
