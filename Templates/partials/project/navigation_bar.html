@@ -23,6 +23,9 @@
         {% endif %}
     </li>
      
+
+    {% if required_project.status == PROJECT_STATUS_COMPLETED %}
+
     <li class="nav-item">
         
         {% if  title == "Project Reviews" %}
@@ -33,7 +36,8 @@
             
         {% endif %}
     </li>
-
+    
+    {% endif %}
 
     {% if required_project.status != PROJECT_STATUS_OPEN %}
         

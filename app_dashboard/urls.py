@@ -31,6 +31,8 @@ urlpatterns = [
         
     path('viewProjectChat', viewProjectChat, name='viewProjectChat'),  
     path('markProjectCompleted', markProjectCompleted, name='markProjectCompleted'),  
+    path('raiseDispute', raiseDispute, name='raiseDispute'),  
+    path('resolveDispute', resolveDispute, name='resolveDispute'),  
     
     path('view_project_chat', view_project_chat, name='view_project_chat'),
     path('view_project_chat/', view_project_chat, name='view_project_chat'),

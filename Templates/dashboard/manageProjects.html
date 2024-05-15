@@ -17,6 +17,20 @@
 
 					
 					<div class="dt-action-buttons text-end"> 
+
+
+
+
+						{% if request.user.is_superuser %}
+						<div class="dt-buttons d-inline-flex">
+							<a href="{%url 'manageProjects'%}?disputed=1" type="button" class="btn btn-primary" id="">
+								View Disputed Projects
+							</a>
+						</div> 
+							
+						{% endif %}
+
+
 						<div class="dt-buttons d-inline-flex">
 							<a type="button" class="btn btn-info" id="clear_filter_btn">
 								Clear Filter
@@ -141,7 +155,7 @@
 											<td> 
                                                 
                                                 <a href="{%url 'viewProject'%}?id={{project.id}}" class="btn btn-primary "  >View Details</i> </a> 
-                                                {% if required_project.status != PROJECT_STATUS_OPEN %}
+                                                {% if project.status != PROJECT_STATUS_OPEN %}
 													
 												<a href="{%url 'viewProjectChat'%}?id={{project.id}}" class="btn btn-info"  onclick=""><i class="me-50 " data-feather="message-square"></i> </a> 
 												{% endif %}

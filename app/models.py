@@ -92,9 +92,11 @@ class ProjectsTable(models.Model):
     freelancer_review = models.TextField(default='',blank=True)
     freelancer = models.ForeignKey(ProfilesTable,on_delete=models.CASCADE,blank=True,null=True,related_name="freelancer")
     created_by = models.ForeignKey(ProfilesTable,on_delete=models.CASCADE,blank=True,null=True,related_name="created_by")
+    admin = models.ForeignKey(ProfilesTable,on_delete=models.CASCADE,blank=True,null=True,related_name="administrator")
     bids = models.ManyToManyField(BidsTable,blank=True,related_name="bids")
     skills = models.ManyToManyField(SkillsTable,blank=True,related_name='required_skills')
     messages = models.ManyToManyField(MessagesTable,blank=True)
+    # is_disputed = models.BooleanField(default=False,blank=True,null=True)
     
     
 class DisputesTable(models.Model):

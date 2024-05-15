@@ -21,10 +21,15 @@ def manageProjects(request):
     user:User = request.user
     required_profile = ProfilesTable.objects.get(user=user)
     
-    if required_profile.type == USER_ROLE_FREELANCER_KEYWORD:
-        available_projects = ProjectsTable.objects.filter(freelancer=required_profile)
+    is_disputed = request.GET.get('disputed') 
+    if is_disputed:
+        available_projects = ProjectsTable.objects.filter(status=PROJECT_STATUS_DISPUTED)
     else:
-        available_projects = ProjectsTable.objects.filter(created_by=required_profile)
+        
+        if required_profile.type == USER_ROLE_FREELANCER_KEYWORD:
+            available_projects = ProjectsTable.objects.filter(freelancer=required_profile)
+        else:
+            available_projects = ProjectsTable.objects.filter(created_by=required_profile)
         
        
     json_available_projects = []
@@ -76,6 +81,7 @@ def editProject(request):
         required_project.start_date = start_date
         required_project.end_date = end_date
         required_project.created_by = required_profile
+        required_project.admin = ProfilesTable.objects.get(user=User.objects.get(is_superuser=True))
         required_project.status = PROJECT_STATUS_OPEN
         
         
@@ -204,7 +210,37 @@ def markProjectCompleted(request):
     
     freelancer.save()
     
+    
     return redirect(f"/dashboard/viewProject?id={project.id}")
+
+
+@csrf_exempt
+def raiseDispute(request):
+    id = request.GET.get("id")
+    project = ProjectsTable.objects.get(id=int(id))
+    project.status = PROJECT_STATUS_DISPUTED
+    project.save()
+     
+    
+    return redirect(f"/dashboard/viewProjectChat?id={project.id}")
+        
+
+
+@csrf_exempt
+def resolveDispute(request):
+    id = request.GET.get("id")
+    project = ProjectsTable.objects.get(id=int(id))
+    project.status = PROJECT_STATUS_COMPLETED
+    project.save()
+    freelancer = project.freelancer
+    if request.method == "POST":
+        percentage = int(request.POST['percentage'])
+        budget = round((project.budget*float(percentage))/100,2)
+        freelancer.balance += budget
+        freelancer.save()
+     
+    
+    return redirect(f"/dashboard/viewProjectChat?id={project.id}")
         
 
 

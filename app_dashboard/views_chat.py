@@ -26,19 +26,25 @@ def viewProjectChat(request):
     required_project = ProjectsTable.objects.get(id=int(project_id))
      
     
+    print(User.objects.get(is_superuser=True))
     
     created_by = model_to_dict(required_project.created_by) 
+    admin = model_to_dict(required_project.admin) 
     freelancer = model_to_dict(required_project.freelancer)
     
     del created_by['skills']
     del created_by['experience']
     del freelancer['skills']
     del freelancer['experience']
+    del admin['skills']
+    del admin['experience']
     
     context['required_project'] = required_project
+     
     context['required_user'] = request.user
     context['required_user_id'] = request.user.id
     context['employer_profile'] = json.dumps(created_by)
+    context['admin_profile'] = json.dumps(admin)
     context['freelancr_profile'] = json.dumps(freelancer )
     # print(payment_intents)
     return render(request, 'dashboard/viewProjectChat.html',context)

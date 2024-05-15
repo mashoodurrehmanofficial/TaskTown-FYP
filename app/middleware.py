@@ -49,12 +49,15 @@ def context_processor(request):
         
          
     context['USER_ROLE_FREELANCER_KEYWORD'] = USER_ROLE_FREELANCER_KEYWORD
+    context['PROJECT_STATUS_DISPUTED'] = PROJECT_STATUS_DISPUTED
+    context['PROJECT_STATUS_COMPLETED'] = PROJECT_STATUS_COMPLETED
     context['PROJECT_STATUS_OPEN'] = PROJECT_STATUS_OPEN
     context['PROJECT_STATUS_ACTIVE'] = PROJECT_STATUS_ACTIVE
     context['USER_ROLE_CLIENT_KEYWORD'] = USER_ROLE_CLIENT_KEYWORD 
 
 
     context['user'] = user
+    context['is_superuser'] = user.is_superuser 
     context['is_dark_theme'] = request.session.pop('is_dark_theme', False) 
     request.session['is_dark_theme'] = context['is_dark_theme']
         
